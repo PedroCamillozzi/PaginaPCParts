@@ -1,0 +1,52 @@
+<mat-drawer-container class="example-container">
+  <mat-drawer mode="side" opened class="navbar">
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      <!-- This is the tree node template for leaf nodes -->
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+        <!-- use a disabled button to provide padding for tree leaf -->
+        <button mat-icon-button disabled></button>
+        <button mat-button>
+          {{node.name}}
+        </button>
+        
+      </mat-tree-node>
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+        <button mat-icon-button matTreeNodeToggle
+                [attr.aria-label]="'Toggle ' + node.name">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        {{node.name}}
+      </mat-tree-node>
+    </mat-tree>
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-card>
+      <mat-card-content>
+        <div class="dropdown">
+          <span>Ordenar Por: </span>
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown button
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Todos</a></li>
+            <li><a class="dropdown-item" href="#">Mayor Precio</a></li>
+            <li><a class="dropdown-item" href="#">Menor Precio</a></li>
+          </ul>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div class="card" style="width: 18rem;">
+      <img src="images/Procesador_Intel_Celeron_G4900.jpg" class="card-img-top" alt="Imagen del Producto">
+      <div class="card-body">
+        <h5 class="card-title">Procesador Intel Celeron G4900 3.10GHz Socket 1151 OEM Coffe</h5>
+        <p class="card-text">$16.600</p>
+        <a href="#" class="btn btn-primary">Agregar al Carrito</a>
+      </div>
+    </div>
+
+  </mat-drawer-content>
+</mat-drawer-container>
