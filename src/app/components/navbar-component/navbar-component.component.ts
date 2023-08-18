@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar-component',
@@ -6,8 +7,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./navbar-component.component.css']
 })
 export class NavbarComponentComponent {
-
   logueado:boolean= false;
+
+
+  constructor( private routes: Router){
+
+  }
+
+  reciveDataFromChild(logueado:boolean){
+    this.logueado = logueado;
+
+  }
+
+  redirectToCarrito(){
+    this.routes.navigate(['carrito']);
+  }
 
 
 }

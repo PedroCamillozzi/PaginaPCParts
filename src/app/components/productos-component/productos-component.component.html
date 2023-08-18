@@ -38,15 +38,21 @@
         </div>
       </mat-card-content>
     </mat-card>
-
-    <div class="card" style="width: 18rem;">
-      <img src="images/Procesador_Intel_Celeron_G4900.jpg" class="card-img-top" alt="Imagen del Producto">
-      <div class="card-body">
-        <h5 class="card-title">Procesador Intel Celeron G4900 3.10GHz Socket 1151 OEM Coffe</h5>
-        <p class="card-text">$16.600</p>
-        <a href="#" class="btn btn-primary">Agregar al Carrito</a>
+    
+    <div class="contenedorCartas">
+    <div *ngFor="let producto of listaProductos; let i = index " >
+      <div  class="card">
+        <img src="../../../assets/images/Procesador_Intel_Celeron_G4900.jpg" class="card-img-top" alt="Imagen del Producto">
+        <div class="card-body">
+          <h5 class="card-title">{{producto?.nombreProducto}}</h5>
+          <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto === producto?.idProducto">{{listaPrecioProductos[i].precio}}</p>
+          <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto !== producto?.idProducto">No existe precio para el producto</p>
+          <a routerLink="carrito" class="btn btn-primary">Agregar al Carrito</a>
+        </div>
       </div>
     </div>
+  </div>
+
 
   </mat-drawer-content>
 </mat-drawer-container>

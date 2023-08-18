@@ -8,6 +8,11 @@
     padding-right: 5rem;
 }
 
-.container-main{
+.contenedorCartas{
+  display: flex;
+}
 
+.card{
+  width: 18rem;
+  margin-left: 10px;
 }

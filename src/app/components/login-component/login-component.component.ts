@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Cliente } from 'src/app/interfaces/Cliente';
@@ -14,8 +14,10 @@ import { ErrorService } from 'src/app/services/error.service';
 export class LoginComponentComponent implements OnInit{
   email:string='';
   password:string='';
-  loading:boolean=false
-  
+  loading:boolean=false;
+
+  @Output() dataToParent: EventEmitter<boolean> = new EventEmitter<boolean>();
+  logueado:boolean= false;
 
   constructor(private toastr:ToastrService,
               private _clienteService:ClienteService,
@@ -40,20 +42,28 @@ export class LoginComponentComponent implements OnInit{
       contraseña: this.password
     }
 
+  
 
 
 
-    this.loading = true
+    this.loading = false;
     this._clienteService.login(cliente).subscribe({
       next: (token)=>{
         localStorage.setItem('token', token);
         this.router.navigate(['/']);
+        this.loading = true;
+        this.cerrarModal();
       },
       error: (err:HttpErrorResponse) => {
         this._errorService.msjError(err);
         this.loading = false;
       }
     });
+    
+  }
+  cerrarModal(){
+    this.logueado = true;
+    this.dataToParent.emit(this.logueado);
     
   }
 

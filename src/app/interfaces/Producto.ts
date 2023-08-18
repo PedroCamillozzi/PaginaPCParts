@@ -1,5 +1,5 @@
 export interface Producto{
-    idProducto?:number;
+    idProducto:number;
     nombreProducto:string;
     descripcionProducto:string;
     imagen?:ImageData;
