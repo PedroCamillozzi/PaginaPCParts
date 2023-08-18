@@ -1,9 +1,9 @@
 export interface Cliente {
-    idCliente: number,
-    nombre: string,
-    apellido: string,
-    dni:string,
+    idCliente?: number,
+    nombre?: string,
+    apellido?: string,
+    dni?:string,
     email: string,
-    telefono: string,
+    telefono?: string,
     contraseña: string
 }

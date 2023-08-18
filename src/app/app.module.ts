@@ -11,6 +11,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from './shared/shared';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponentComponent } from './components/login-component/login-component.component';
+import { NavbarComponentComponent } from './components/navbar-component/navbar-component.component';
+import { FormsModule } from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes:Routes=[
   {path:'', component:HomeComponentComponent},
@@ -25,13 +29,21 @@ const routes:Routes=[
     ProductoComponentComponent,
     CarritoComponentComponent,
     RegistroComponentComponent,
-    LoginComponentComponent
+    LoginComponentComponent,
+    NavbarComponentComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     RouterModule.forRoot(routes),
     SharedModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
