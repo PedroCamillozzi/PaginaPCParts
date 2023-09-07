@@ -42,12 +42,12 @@
     <div class="contenedorCartas">
     <div *ngFor="let producto of listaProductos; let i = index " >
       <div  class="card">
-        <img src="../../../assets/images/Procesador_Intel_Celeron_G4900.jpg" class="card-img-top" alt="Imagen del Producto">
+        <img (click)="redirectToProducto(producto.idProducto)" src="../../../assets/images/Procesador_Intel_Celeron_G4900.jpg" class="card-img-top selected" alt="Imagen del Producto">
         <div class="card-body">
-          <h5 class="card-title">{{producto?.nombreProducto}}</h5>
+          <h5 (click)="redirectToProducto(producto.idProducto)"  class="card-title selected">{{producto?.nombreProducto}}</h5>
           <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto === producto?.idProducto">{{listaPrecioProductos[i].precio}}</p>
           <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto !== producto?.idProducto">No existe precio para el producto</p>
-          <a routerLink="carrito" class="btn btn-primary">Agregar al Carrito</a>
+          <button (click)="redirecToCarrito(producto.idProducto)" class="btn btn-primary">Agregar al Carrito</button>
         </div>
       </div>
     </div>

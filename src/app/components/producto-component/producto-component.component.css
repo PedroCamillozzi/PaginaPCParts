@@ -1,0 +1,35 @@
+.carousel{
+    width: 40%;
+    transform: translate(215px, 50px);
+}
+
+.img-carousel{
+    max-height: 433px;
+}
+
+.detallesProducto{
+    max-width: 30%;
+    margin-left: 18rem;
+    margin-top: 3rem;
+}
+
+.title{
+    height: 130px;
+    width: 100%;
+}
+
+.text{
+    height: 240px;
+    width: 100%;
+    transform:translate(0px, 1px);
+    overflow: auto;
+}
+
+.buy-button{
+    transform:translate(0px, 5px);
+}
+
+.btn{
+    height: 60px;
+    width: 100%;
+}

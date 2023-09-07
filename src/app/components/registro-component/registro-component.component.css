@@ -1,0 +1,12 @@
+.size{
+    display: flex;
+    flex-direction: row;
+}
+
+.disposicion{
+    margin-left: 20px;
+}
+
+.size-inputs{
+    width: 100%;
+}

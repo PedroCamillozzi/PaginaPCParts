@@ -48,9 +48,10 @@ export class LoginComponentComponent implements OnInit{
 
     this.loading = false;
     this._clienteService.login(cliente).subscribe({
-      next: (token)=>{
-        localStorage.setItem('token', token);
-        this.router.navigate(['/']);
+      next: (data:any)=>{
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('idCliente', data.idCliente);
+        this.router.navigate(['home']);
         this.loading = true;
         this.cerrarModal();
       },

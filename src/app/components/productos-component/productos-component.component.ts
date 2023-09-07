@@ -1,6 +1,8 @@
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, OnInit } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { Categoria } from 'src/app/interfaces/Categoria';
 import { PrecioProducto } from 'src/app/interfaces/PrecioProductos';
@@ -54,13 +56,15 @@ export class ProductosComponentComponent implements OnInit {
 
 
   constructor(private _productoService:ProductoService,
-    private _precioProductoService:PrecioProductoService){
+    private _precioProductoService:PrecioProductoService,
+    private router:Router,
+    private toastr:ToastrService){
     this.getProductosAndPrecioActProducto();
     this.dataSource.data = tree_Categoria;
   }
 
   ngOnInit(): void {
-    
+
   }
 
   getProductos(){
@@ -100,6 +104,22 @@ export class ProductosComponentComponent implements OnInit {
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+
+  redirectToProducto(idProducto:Number){
+    this.router.navigate(['producto/'+idProducto])
+  }
+
+  redirecToCarrito(idProducto:Number){
+    const token:string = localStorage.getItem('token') || "";
+    const idCliente:string = localStorage.getItem('idCliente') || '';
+  
+    if(token !== null && token !== ""){
+      this.router.navigate(['carrito/'+ idCliente + '/' + idProducto]);
+        return 
+      }
+    this.toastr.error("Debe ingresar para poder añadir productos al carrito", 'Acción Inválida');
+  
+  }
   
 
 }

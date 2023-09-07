@@ -17,6 +17,10 @@ constructor(private http:HttpClient) {
   this.myApiUrl = 'client/'
  }
 
+ signIn(cliente:Cliente):Observable<any>{
+  return this.http.post(this.myAppUrl + this.myApiUrl + 'signIn', cliente)
+ }
+
  login(cliente:Cliente):Observable<string>{
   return this.http.post<string>(this.myAppUrl + this.myApiUrl + 'login', cliente);
  }

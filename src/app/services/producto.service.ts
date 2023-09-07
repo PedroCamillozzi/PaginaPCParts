@@ -13,11 +13,15 @@ private myApiUrl:string;
 
 constructor(private http:HttpClient) {
   this.myAppUrl = environment.endpoint;
-  this.myApiUrl = 'productos/all'
+  this.myApiUrl = 'productos/'
  }
 
 getProductos():Observable<Producto[]>{
-  return this.http.get<Producto[]>(this.myAppUrl+this.myApiUrl)
+  return this.http.get<Producto[]>(this.myAppUrl+this.myApiUrl + 'all')
+}
+
+getProducto(idProducto:String):Observable<Producto>{
+  return this.http.get<Producto>(this.myAppUrl + this.myApiUrl + idProducto)
 }
 
 }

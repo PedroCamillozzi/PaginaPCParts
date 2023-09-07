@@ -14,5 +14,18 @@
 
 .card{
   width: 18rem;
-  margin-left: 10px;
+  margin-left: 20px;
+  margin-top: 20px;
+  overflow: hidden;
+  transition: box-shadow 0.5s;
+}
+
+.card:hover{
+  -webkit-transform:scale(1.05);transform:scale(1.05);
+  box-shadow: 6px 6px 6px #555;
+}
+
+
+.selected{
+  cursor: pointer;
 }

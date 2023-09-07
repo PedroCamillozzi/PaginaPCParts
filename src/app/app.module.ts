@@ -15,11 +15,21 @@ import { NavbarComponentComponent } from './components/navbar-component/navbar-c
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './Interceptor/auth.interceptor';
 
 const routes:Routes=[
   {path:'', component:HomeComponentComponent},
+  {path:'home', component:HomeComponentComponent},
+  {path:'home/:idCliente', component:HomeComponentComponent},
   {path:'productos', component:ProductosComponentComponent},
-  {path: 'carrito', component:CarritoComponentComponent}
+  //{path:'productos/:idCliente', component:ProductosComponentComponent},
+  {path: 'producto/:id', component:ProductoComponentComponent},
+  {path: 'carrito/:idCliente', component:CarritoComponentComponent},
+  //{path: 'carrito/:idCliente', component:CarritoComponentComponent},
+  {path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},
+  //{path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},
+  //{path:'**', component: HomeComponentComponent},
+
 ]
 
 @NgModule({
@@ -46,7 +56,7 @@ const routes:Routes=[
       preventDuplicates: true,
     })
   ],
-  providers: [],
+  providers: [AuthInterceptor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

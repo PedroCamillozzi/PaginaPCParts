@@ -1,0 +1,28 @@
+.containerA{
+    margin-top: 50px;
+    margin-left: 10%;
+    height: 100%;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    border: ridge;
+    border-radius: 20px
+}
+
+.containerB{
+    height: 100px;
+    width: 100%;
+    background-color: #555;
+    font-size: large;
+    text-align: center;
+}
+
+.btn-buy{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.cant{
+    width: 16%;
+    transform: translate(5%, 40%);
+}
