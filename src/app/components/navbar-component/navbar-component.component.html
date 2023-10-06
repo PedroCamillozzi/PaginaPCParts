@@ -65,8 +65,8 @@
                   Mi Perfil
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" routerLink="#">Mis Pedidos</a></li>
-                  <li><a class="dropdown-item" routerLink="#">Datos Personales</a></li>
+                  <li><a class="dropdown-item" (click)="redirectToPedidosCliente()" style="cursor: pointer;">Mis Pedidos</a></li>
+                  <li><a (click)="redirectToDatosPersonales()" class="dropdown-item" style="cursor: pointer;">Datos Personales</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a (click)="cerrarSesion()" class="dropdown-item" href=''>Cerrar Sesión</a></li>
                 </ul>
@@ -81,7 +81,7 @@
   </nav>
   <div class="container">
     <form class="d-flex mt-3 mb-3" role="search">
-      <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+      <input  class="form-control me-2" type="text" [(ngModel)]="filtro" (input)="filtradoProducto()"  placeholder="Buscar" aria-label="Search">
       <button class="btn btn-outline-success" type="submit">Buscar</button>
     </form>
   </div>

@@ -1,0 +1,17 @@
+.formContainer{
+    width: 50%;
+}
+
+.Contenedorfoto{
+width: 25%
+}
+
+.foto{
+    width: 95% ;
+    height: 50%;
+}
+
+.contenedor{
+    display: flex;
+    flex-direction: row;
+}

@@ -1,5 +1,5 @@
 <div class="containerB">
-    <h1 style="color: aliceblue;">Tu Carrito!</h1>
+    <h1 style="color: aliceblue;">Tus Pedidos!</h1>
 </div>
 
 <div class="containerA">
@@ -20,24 +20,17 @@
               </div>
             </div>
             <div class="col-md-4 cant">
-              <div *ngFor="let cc of carritoCliente; ">
-                <div *ngIf="cc.idProducto == pc.idProducto">
-                  <div *ngIf="cc.cantidad == 1; else elseBlock">
-                    
-                    <button class="btnCambioUnidad"  (click)="aumentarCantidad(cc)">↑</button>
-                    <button class="btnBorrar" (click)="eliminarDelCarrito(cc)">x</button>
-                    <p >Cantidad: <strong>{{cc.cantidad}}</strong> Unidad </p>
-                    <button class="btnCambioUnidad" (click)="disminuirCantidad(cc)">↓</button>
+              <div *ngFor="let dpc of detalleProductosCliente; ">
+                <div *ngIf="dpc.idProducto == pc.idProducto">
+                  <div *ngIf="dpc.cantidad == 1; else elseBlock">
+                    <p >Cantidad: <strong>{{dpc.cantidad}}</strong> Unidad </p>
                   </div>
                   <ng-template #elseBlock>
-                    <button class="btnCambioUnidad" (click)="aumentarCantidad(cc)">↑</button>
-                    <button class="btnBorrar" (click)="eliminarDelCarrito(cc)">x</button>
-                    <p >Cantidad: <strong>{{cc.cantidad}}</strong> Unidades </p>
-                    <button class="btnCambioUnidad" (click)="disminuirCantidad(cc)">↓</button>
+                    <p >Cantidad: <strong>{{dpc.cantidad}}</strong> Unidades </p>
                   </ng-template>
                   <div *ngFor="let ppc of precioProductosCliente;">
                     <div class="lblSubTotal" *ngIf="ppc.idProducto == pc.idProducto">
-                      <p>Sub-Total: ${{ppc.precio * cc.cantidad}}</p>
+                      <p>Sub-Total: ${{ppc.precio * dpc.cantidad}}</p>
                     </div>
                     
                   </div>
@@ -57,9 +50,7 @@
       <p [(ngModel)]="total">Total: $<strong>{{total}}</strong> </p>
     </div>
     <div class="div-buy">
-      <button type="button" class="btn btn-primary btn-buy" (click)="registrarPedido()">Comprar</button>
 
 </div>
     
 </div>
-    

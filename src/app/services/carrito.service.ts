@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Producto } from '../interfaces/Producto';
 import { environment } from 'src/environment/environment';
 import { HttpClient } from '@angular/common/http';
+import { Carrito } from '../interfaces/Carrito';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +15,19 @@ constructor(private http:HttpClient) {
   this.myApiUrl = 'carrito/'
 }
 
-getProductosCarritoCliente(idCliente:string):Observable<Producto[]>{
-  return this.http.get<Producto[]>(this.myAppUrl+this.myApiUrl+idCliente);
+getProductosCarritoCliente(idCliente:string):Observable<Carrito[]>{
+  return this.http.get<Carrito[]>(this.myAppUrl+this.myApiUrl+idCliente);
 }
 
 patchProductoCarritoCliente(clienteProducto:any):Observable<any>{
   return this.http.patch<any>(this.myAppUrl+this.myApiUrl+'addItem', clienteProducto)
+}
+
+patchModificarCantidadCarritoCliente(cc:Carrito):Observable<any>{
+  return this.http.patch<any>(this.myAppUrl+this.myApiUrl+'addCantidad', cc)
+}
+
+removeProductoCarritoCliente(productoCarrito:Carrito):Observable<any>{
+  return this.http.delete<any>(this.myAppUrl+this.myApiUrl+'/'+productoCarrito.idCliente+'/'+productoCarrito.idProducto)
 }
 }

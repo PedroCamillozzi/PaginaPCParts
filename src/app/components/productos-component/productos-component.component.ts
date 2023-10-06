@@ -64,7 +64,7 @@ export class ProductosComponentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    
   }
 
   getProductos(){
@@ -120,6 +120,18 @@ export class ProductosComponentComponent implements OnInit {
     this.toastr.error("Debe ingresar para poder añadir productos al carrito", 'Acción Inválida');
   
   }
+
+  ordenarPorTodos(){
+
+  }
+
+
+  ordenarPorMenorPrecio(){
+
+  }
   
+  ordenarPorMayorPrecio() {
+
+  }
 
 }

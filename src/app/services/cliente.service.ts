@@ -25,4 +25,16 @@ constructor(private http:HttpClient) {
   return this.http.post<string>(this.myAppUrl + this.myApiUrl + 'login', cliente);
  }
 
+ getDatosCliente(idCliente:String):Observable<Cliente>{
+  return this.http.get<Cliente>(this.myAppUrl+this.myApiUrl+idCliente)
+ }
+
+ patchcambiarDatosCliente(cliente:Cliente):Observable<any>{
+  return this.http.patch<any>(this.myAppUrl+this.myApiUrl, cliente)
+ }
+
+ patchcambiarContraseñaCliente(cliente:any):Observable<any>{
+  return this.http.patch<any>(this.myAppUrl+this.myApiUrl+'cambiaContrasenia/', cliente)
+ }
+
 }

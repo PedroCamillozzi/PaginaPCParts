@@ -1,0 +1,48 @@
+<div class="contenedor">
+    <div class="Contenedorfoto">
+        <img class="foto" src="../../../assets/images/celeron.jpg" alt="">
+    </div>
+    <div class="formContainer">
+        <form>
+            <div class="mb-3">
+                <div class="size">
+                    <div class="size-inputs">
+                <label for="exampleInputEmail1" class="form-label">Nombre</label>
+                <input  type="email" [(ngModel)]="name" name="name" class="form-control">
+                    </div>
+                    <div class="disposicion size-inputs">
+                    <label for="exampleInputEmail1" class="form-label">Apellido</label>
+                    <input  type="email" [(ngModel)]="lastName" name="lastName" class="form-control"  >
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Teléfono</label>
+                <input  type="email" [(ngModel)]="phone" name="phone" class="form-control" aria-describedby="emailHelp">
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="cambiarDatos()">Cambiar Datos</button>
+            </div>
+            <div>
+                <button class="btn btn-primary mt-3" (click)="mostrarFormulario()">Recuperar contraseña</button>
+            </div>
+            <div *ngIf="recupera">
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Constraseña Actual</label>
+                    <input type="password" [(ngModel)]="oldPassword" name="password" class="form-control" id="exampleInputPassword1">
+                  </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Nueva Constraseña</label>
+                    <input type="password" [(ngModel)]="newPassword" name="password" class="form-control" id="exampleInputPassword1">
+                  </div>
+                  <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label">Repetir Nueva Contraseña</label>
+                      <input type="password" [(ngModel)]="repeatNewPassword" name="password" class="form-control" id="exampleInputPassword1">
+                  </div>
+                  <div>
+                    <button class="btn btn-primary mt-3" (click)="cambiarContrasenia()">Confirmar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

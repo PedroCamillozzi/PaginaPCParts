@@ -28,12 +28,12 @@
         <div class="dropdown">
           <span>Ordenar Por: </span>
           <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown button
+            Filtrado
           </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Todos</a></li>
-            <li><a class="dropdown-item" href="#">Mayor Precio</a></li>
-            <li><a class="dropdown-item" href="#">Menor Precio</a></li>
+            <li><a class="dropdown-item" (click)="ordenarPorTodos()">Todos</a></li>
+            <li><a class="dropdown-item" (click)="ordenarPorMayorPrecio()">Mayor Precio</a></li>
+            <li><a class="dropdown-item" (click)="ordenarPorMenorPrecio()">Menor Precio</a></li>
           </ul>
         </div>
       </mat-card-content>

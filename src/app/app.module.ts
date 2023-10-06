@@ -16,19 +16,28 @@ import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './Interceptor/auth.interceptor';
+import { MisDatosPersonalesComponentComponent } from './components/mis-datos-personales-component/mis-datos-personales-component.component';
+import { MisPedidosComponentComponent } from './components/mis-pedidos-component/mis-pedidos-component.component';
+import { GraciasPorSucompraComponent } from './components/gracias-por-sucompra/gracias-por-sucompra.component';
+import { AuthGuardService } from './Guards/auth.guard.service';
 
 const routes:Routes=[
   {path:'', component:HomeComponentComponent},
   {path:'home', component:HomeComponentComponent},
+  {path: 'misdatos/:idCliente', component:MisDatosPersonalesComponentComponent},// canActivate: [AuthGuardService]}
   {path:'home/:idCliente', component:HomeComponentComponent},
   {path:'productos', component:ProductosComponentComponent},
   //{path:'productos/:idCliente', component:ProductosComponentComponent},
   {path: 'producto/:id', component:ProductoComponentComponent},
-  {path: 'carrito/:idCliente', component:CarritoComponentComponent},
+  {path: 'carrito/:idCliente', component:CarritoComponentComponent},// canActivate: [AuthGuardService]},
   //{path: 'carrito/:idCliente', component:CarritoComponentComponent},
-  {path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},
+  {path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},// canActivate: [AuthGuardService]},
+  {path: 'finalizarPedido', component:GraciasPorSucompraComponent},
+  {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent}
+ 
   //{path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},
   //{path:'**', component: HomeComponentComponent},
+ 
 
 ]
 
@@ -41,7 +50,10 @@ const routes:Routes=[
     CarritoComponentComponent,
     RegistroComponentComponent,
     LoginComponentComponent,
-    NavbarComponentComponent
+    NavbarComponentComponent,
+    MisDatosPersonalesComponentComponent,
+    MisPedidosComponentComponent,
+    GraciasPorSucompraComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +68,7 @@ const routes:Routes=[
       preventDuplicates: true,
     })
   ],
-  providers: [AuthInterceptor],
+  providers: [AuthInterceptor, AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
