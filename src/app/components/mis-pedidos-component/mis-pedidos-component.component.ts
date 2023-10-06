@@ -32,34 +32,39 @@ export class MisPedidosComponentComponent implements OnInit {
 
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.findAllPedidosCliente();
-    await this.getDetallePedidos();
-    await this.getProductoCliente();
+  ngOnInit(): void {
+    this.findAllPedidosCliente();
+   
     console.log(this.productosCliente);
     
-    await this.getPrecioProductosCliente();
+    this.getPrecioProductosCliente();
     
   }
   
 
-  async findAllPedidosCliente(){
+  findAllPedidosCliente(){
     const idCliente:string = localStorage.getItem('idCliente') || '';
-    try{
-      this.pedidosRealizadosCliente = await this._pedidoService.findAllPedidosCliente(idCliente).toPromise();
-    }
-    catch(error){
-
-    }
-   
+      this._pedidoService.findAllPedidosCliente(idCliente).subscribe((data:Pedido[]|any) =>{
+        this.pedidosRealizadosCliente = data
+        console.log("data: ", data);
+        
+        console.log(this.pedidosRealizadosCliente);
+        
+        this.getDetallePedidos();
+      })
+      
   }
 
-  async getDetallePedidos(){
-    this.pedidosRealizadosCliente?.forEach(async (prc) => {
+  getDetallePedidos(){
+    this.pedidosRealizadosCliente?.forEach((prc) => {
      this._detallePedidoService.findAllDetallePedidoCliente(prc.idPedido.toString()).subscribe((data:DetallePedidos[]|any) =>{
-      this.detalleProductosCliente.push(data[0])
+      data.forEach((d:any) => {
+        const dprod = d
+      }); // hacer otra interface o Array de arrays
+
+      this.getProductoCliente();
      })
-  
+     
       
     });
   }

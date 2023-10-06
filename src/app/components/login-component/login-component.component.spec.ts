@@ -1,6 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponentComponent } from './login-component.component';
+import { LogueoService } from 'src/app/services/logueo.service';
+
+class LogueoServiceMock{
+  tokenExpirado(){
+    return
+  }
+}
+
 
 describe('LoginComponentComponent', () => {
   let component: LoginComponentComponent;
@@ -8,7 +16,9 @@ describe('LoginComponentComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LoginComponentComponent]
+      declarations: [LoginComponentComponent],
+      providers:[{ provide: LogueoService, useClass: LogueoServiceMock}
+      ]
     });
     fixture = TestBed.createComponent(LoginComponentComponent);
     component = fixture.componentInstance;
