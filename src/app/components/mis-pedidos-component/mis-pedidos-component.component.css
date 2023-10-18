@@ -41,11 +41,6 @@
     font-weight: bold;
 }
 
-.lblTotal{
-    display: flex;
-    flex-direction: row-reverse;
-    margin-right: 28px ;
-}
 
 .btnCambioUnidad{
     transform: translate(65px, -5px);

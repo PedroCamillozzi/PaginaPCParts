@@ -17,7 +17,10 @@ export class PedidoService {
    }
 
   findAllPedidosCliente(idCliente:string):Observable<Pedido[]>{
-    return this.http.get<Pedido[]>(this.myAppUrl+this.myApiUrl+idCliente)
+    return this.http.get<Pedido[]>(this.myAppUrl+this.myApiUrl+'/'+idCliente)
   }
 
+  postPedidoCliente(pedido:any):Observable<any>{
+    return this.http.post(this.myAppUrl+this.myApiUrl, pedido);
+  }
 }

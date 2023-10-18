@@ -1,11 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Carrito } from 'src/app/interfaces/Carrito';
+import { DetallePedidos } from 'src/app/interfaces/DetallePedido.js';
+import { Pedido } from 'src/app/interfaces/Pedido.js';
 import { PrecioProducto } from 'src/app/interfaces/PrecioProductos';
 import { Producto } from 'src/app/interfaces/Producto';
 import { CarritoService } from 'src/app/services/carrito.service';
+import { DetallePedidoService } from 'src/app/services/detallePedido.service';
 import { ErrorService } from 'src/app/services/error.service';
+import { PedidoService } from 'src/app/services/pedido.service';
 import { PrecioProductoService } from 'src/app/services/precioProducto.service';
 import { ProductoService } from 'src/app/services/producto.service';
 
@@ -27,26 +32,27 @@ export class CarritoComponentComponent implements OnInit {
               private _errorService:ErrorService,
               private _productoService:ProductoService,
               private _precioProductoService:PrecioProductoService,
-              private router:Router){
+              private _toastr:ToastrService,
+              private router:Router,
+              private _pedidoService:PedidoService,
+              private _detallePedidoService:DetallePedidoService){
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.getCarritoCliente();
-    await this.getProductoCliente();
-    await this.getPrecioProductosCliente();
+  ngOnInit(): void{
+    this.getCarritoCliente();
 
     this.verificarIdProducto();
   }
   
-  async getCarritoCliente() {
+  getCarritoCliente() {
     const idCliente: string = localStorage.getItem('idCliente') || '';
-    try {
-      this.carritoCliente = await this._carritoService.getProductosCarritoCliente(idCliente).toPromise();
-    } catch (error) {
-
-    }
+    this._carritoService.getProductosCarritoCliente(idCliente).subscribe(data=>{
+      this.carritoCliente = data
+      
+    })
+    this.getProductoCliente();
   }
-async getProductoCliente(){
+getProductoCliente(){
     this.carritoCliente?.forEach(cc => {
     this._productoService.getProducto(cc.idProducto.toString()).subscribe(data=>{
       
@@ -54,21 +60,23 @@ async getProductoCliente(){
     });
       
     });
+    this.getPrecioProductosCliente();
   }
-async getPrecioProductosCliente(){
+getPrecioProductosCliente(){
   this.carritoCliente?.forEach(cc => {
-    this._precioProductoService.getPrecioProducto(cc.idProducto).subscribe(data=>{
-      
+    this._precioProductoService.getPrecioProducto(cc.idProducto).subscribe((data)=>{
       this.precioProductosCliente.push(data);
+
+      this.calcularTotal(cc, data);
     });
       
     });
-    this.calcularTotal();
+    
 
     
 }
 
-  async agregarProductoAlCarrito(){
+  agregarProductoAlCarrito(){
     const idCliente:string = localStorage.getItem('idCliente') || ''; 
     const carritoCliente ={
       idCliente: idCliente,
@@ -76,8 +84,8 @@ async getPrecioProductosCliente(){
       cantidad: 1
     }
     this._carritoService.patchProductoCarritoCliente(carritoCliente).subscribe({
-      next: async (data)=>{
-          await this.getCarritoCliente();
+      next: (data)=>{
+           this.getCarritoCliente();
       },
       error: (err:HttpErrorResponse) => {
         this._errorService.msjError(err);
@@ -85,39 +93,36 @@ async getPrecioProductosCliente(){
     })
   }
 
-  async recuperaIdProducto(){
+  recuperaIdProducto(){
     this._activatedRoute.paramMap.subscribe(params =>{
       const data = params.get('idProducto') || '';
       this.idProducto = data
     })
   }
 
-  async verificarIdProducto(){
-    await this.recuperaIdProducto();
+  verificarIdProducto(){
+    this.recuperaIdProducto();
     if(this.idProducto !== ''){
-      await this.agregarProductoAlCarrito();
+    this.agregarProductoAlCarrito();
     }
   }
 
-  calcularTotal(){
-    this.precioProductosCliente.forEach(ppc => {
-      console.log(ppc.precio);
-      this.carritoCliente?.forEach(cc => {
+  calcularTotal(cc:Carrito, ppc:PrecioProducto){
+
         if(cc.idProducto === ppc.idProducto){
 
-          console.log(ppc.precio);
           
           
           this.total += cc.cantidad*ppc.precio;
         }
-        
-      });
-    });
-    console.log(this.carritoCliente);
-    console.log(this.precioProductosCliente);
+      
+    console.log("Carrito CLiente: ", this.carritoCliente);
+    console.log("Precio Producos cliente: ", this.precioProductosCliente);
+    console.log("productosCliente: ",this.productosCliente );
     
     
-    console.log(this.total);
+    
+    console.log("Total: ",this.total);
     
   }
 
@@ -166,7 +171,31 @@ async getPrecioProductosCliente(){
   }
 
   registrarPedido(){
-    this.router.navigate(['finalizarPedido'])
+    if(!this.productosCliente){
+      this._toastr.error("Debe cargar productos al carrito", "Error")
+      return
+    }
+    const idCliente = localStorage.getItem('idCliente') || '';
+    
+    
+    this.carritoCliente?.forEach(cc => {
+      this._pedidoService.postPedidoCliente(idCliente).subscribe((data)=>{
+        const detallePedido:DetallePedidos = {
+          idPedido: data.idPedido,
+          idProducto: cc.idProducto,
+          cantidad: cc.cantidad
+        }        
+        
+        this._detallePedidoService.postDetallePedido(detallePedido).subscribe(()=>{
+          
+        })
+      })
+    });
+
+    this._carritoService.removeAllProductosCliente(idCliente);
+    this.router.navigate(['finalizarPedido']);
+    
+    
   }
 
 }

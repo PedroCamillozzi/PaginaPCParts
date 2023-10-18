@@ -30,4 +30,8 @@ patchModificarCantidadCarritoCliente(cc:Carrito):Observable<any>{
 removeProductoCarritoCliente(productoCarrito:Carrito):Observable<any>{
   return this.http.delete<any>(this.myAppUrl+this.myApiUrl+'/'+productoCarrito.idCliente+'/'+productoCarrito.idProducto)
 }
+
+removeAllProductosCliente(idCliente:string):Observable<any>{
+  return this.http.delete(this.myAppUrl+this.myApiUrl+'/'+idCliente);
+}
 }

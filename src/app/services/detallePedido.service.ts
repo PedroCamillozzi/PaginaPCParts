@@ -21,6 +21,8 @@ export class DetallePedidoService {
     return this.http.get<DetallePedidos[]>(this.myAppUrl+this.myApiUrl+idPedido)
   }
 
-  
+  postDetallePedido(detallePedido:DetallePedidos):Observable<any>{
+    return this.http.post(this.myAppUrl+this.myApiUrl, detallePedido);
+  }
 
 }

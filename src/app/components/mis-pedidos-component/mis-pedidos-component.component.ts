@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DetallePedidos } from 'src/app/interfaces/DetallePedido';
@@ -21,7 +20,6 @@ export class MisPedidosComponentComponent implements OnInit {
   detalleProductosCliente:DetallePedidos[]=[];
   productosCliente:Producto[]=[];
   precioProductosCliente:PrecioProducto[]=[];
-  total:number=0;
 
   constructor( private _pedidoService: PedidoService,
                 private _productoService: ProductoService,
@@ -34,8 +32,6 @@ export class MisPedidosComponentComponent implements OnInit {
 
   ngOnInit(): void {
     this.findAllPedidosCliente();
-   
-    console.log(this.productosCliente);
     
     this.getPrecioProductosCliente();
     
@@ -44,11 +40,11 @@ export class MisPedidosComponentComponent implements OnInit {
 
   findAllPedidosCliente(){
     const idCliente:string = localStorage.getItem('idCliente') || '';
-      this._pedidoService.findAllPedidosCliente(idCliente).subscribe((data:Pedido[]|any) =>{
+      this._pedidoService.findAllPedidosCliente(idCliente).subscribe((data) =>{
         this.pedidosRealizadosCliente = data
         console.log("data: ", data);
         
-        console.log(this.pedidosRealizadosCliente);
+        console.log("Pedidos cliente ", this.pedidosRealizadosCliente);
         
         this.getDetallePedidos();
       })
@@ -58,9 +54,7 @@ export class MisPedidosComponentComponent implements OnInit {
   getDetallePedidos(){
     this.pedidosRealizadosCliente?.forEach((prc) => {
      this._detallePedidoService.findAllDetallePedidoCliente(prc.idPedido.toString()).subscribe((data:DetallePedidos[]|any) =>{
-      data.forEach((d:any) => {
-        const dprod = d
-      }); // hacer otra interface o Array de arrays
+      this.detalleProductosCliente.push(data[0])
 
       this.getProductoCliente();
      })
@@ -69,7 +63,7 @@ export class MisPedidosComponentComponent implements OnInit {
     });
   }
 
-  async getProductoCliente(){
+  getProductoCliente(){
     console.log("Detalle: ", this.detalleProductosCliente);
 
     for (const prc of this.detalleProductosCliente){
@@ -78,15 +72,17 @@ export class MisPedidosComponentComponent implements OnInit {
     }
     
     
-    this.detalleProductosCliente?.forEach(async dpc => {  
+    this.detalleProductosCliente?.forEach(dpc => {  
       console.log("dpc", dpc.idProducto);
-        
-      const data:any = await this._productoService.getProducto(dpc.idProducto.toString()).toPromise();
-      this.productosCliente.push(data);})
+      
+      this._productoService.getProducto(dpc.idProducto.toString()).subscribe(data=>{
+        this.productosCliente.push(data)
+      })
+    })
 
   }
 
-  async getPrecioProductosCliente(){
+  getPrecioProductosCliente(){
     this.detalleProductosCliente?.forEach(cc => {
       this._precioProductoService.getPrecioProducto(cc.idProducto).subscribe(data=>{
         
@@ -94,29 +90,8 @@ export class MisPedidosComponentComponent implements OnInit {
       });
         
       });
-      this.calcularTotal();
   
       
-  }
-
-  calcularTotal(){
-    this.precioProductosCliente.forEach(ppc => {
-      console.log(ppc.precio);
-      this.detalleProductosCliente?.forEach(cc => {
-        if(cc.idProducto === ppc.idProducto){
-
-          console.log(ppc.precio);
-          
-          
-          this.total += cc.cantidad*ppc.precio;
-        }
-        
-      });
-    });
-    console.log(this.precioProductosCliente);
-    
-    
-    
   }
 
   redirectToProducto(idProducto:number){
