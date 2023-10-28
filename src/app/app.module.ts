@@ -14,7 +14,7 @@ import { LoginComponentComponent } from './components/login-component/login-comp
 import { NavbarComponentComponent } from './components/navbar-component/navbar-component.component';
 import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './Interceptor/auth.interceptor';
 import { MisDatosPersonalesComponentComponent } from './components/mis-datos-personales-component/mis-datos-personales-component.component';
 import { MisPedidosComponentComponent } from './components/mis-pedidos-component/mis-pedidos-component.component';
@@ -33,10 +33,10 @@ const routes:Routes=[
   //{path: 'carrito/:idCliente', component:CarritoComponentComponent},
   {path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},// canActivate: [AuthGuardService]},
   {path: 'finalizarPedido', component:GraciasPorSucompraComponent},
-  {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent}
+  {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent},
  
   //{path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},
-  //{path:'**', component: HomeComponentComponent},
+  {path:'**', component: HomeComponentComponent},
  
 
 ]
@@ -68,7 +68,11 @@ const routes:Routes=[
       preventDuplicates: true,
     })
   ],
-  providers: [AuthInterceptor, AuthGuardService],
+  providers: [{provide: HTTP_INTERCEPTORS,
+              useClass: AuthInterceptor,
+              multi:true
+              },
+              /*AuthGuardService*/],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -46,11 +46,12 @@ export class CarritoComponentComponent implements OnInit {
   
   getCarritoCliente() {
     const idCliente: string = localStorage.getItem('idCliente') || '';
-    this._carritoService.getProductosCarritoCliente(idCliente).subscribe(data=>{
-      this.carritoCliente = data
-      
-    })
-    this.getProductoCliente();
+    if(idCliente != ''){
+      this._carritoService.getProductosCarritoCliente(idCliente).subscribe(data=>{
+        this.carritoCliente = data
+        this.getProductoCliente();
+      })
+    }
   }
 getProductoCliente(){
     this.carritoCliente?.forEach(cc => {
@@ -78,19 +79,21 @@ getPrecioProductosCliente(){
 
   agregarProductoAlCarrito(){
     const idCliente:string = localStorage.getItem('idCliente') || ''; 
-    const carritoCliente ={
-      idCliente: idCliente,
-      idProducto: this.idProducto,
-      cantidad: 1
-    }
-    this._carritoService.patchProductoCarritoCliente(carritoCliente).subscribe({
-      next: (data)=>{
-           this.getCarritoCliente();
-      },
-      error: (err:HttpErrorResponse) => {
-        this._errorService.msjError(err);
+    if(idCliente != ''){
+      const carritoCliente ={
+        idCliente: idCliente,
+        idProducto: this.idProducto,
+        cantidad: 1
       }
-    })
+      this._carritoService.patchProductoCarritoCliente(carritoCliente).subscribe({
+        next: (data)=>{
+             this.getCarritoCliente();
+        },
+        error: (err:HttpErrorResponse) => {
+          this._errorService.msjError(err);
+        }
+      })
+    }
   }
 
   recuperaIdProducto(){
@@ -109,20 +112,10 @@ getPrecioProductosCliente(){
 
   calcularTotal(cc:Carrito, ppc:PrecioProducto){
 
-        if(cc.idProducto === ppc.idProducto){
+        if(cc.idProducto == ppc.idProducto){
 
-          
-          
-          this.total += cc.cantidad*ppc.precio;
+          this.total += (cc.cantidad*ppc.precio);
         }
-      
-    console.log("Carrito CLiente: ", this.carritoCliente);
-    console.log("Precio Producos cliente: ", this.precioProductosCliente);
-    console.log("productosCliente: ",this.productosCliente );
-    
-    
-    
-    console.log("Total: ",this.total);
     
   }
 
@@ -177,23 +170,25 @@ getPrecioProductosCliente(){
     }
     const idCliente = localStorage.getItem('idCliente') || '';
     
-    
-    this.carritoCliente?.forEach(cc => {
-      this._pedidoService.postPedidoCliente(idCliente).subscribe((data)=>{
-        const detallePedido:DetallePedidos = {
-          idPedido: data.idPedido,
-          idProducto: cc.idProducto,
-          cantidad: cc.cantidad
-        }        
-        
-        this._detallePedidoService.postDetallePedido(detallePedido).subscribe(()=>{
+    if(idCliente != ''){
+      this.carritoCliente?.forEach(cc => {
+        this._pedidoService.postPedidoCliente(idCliente).subscribe((data)=>{
+          const detallePedido:DetallePedidos = {
+            idPedido: data.idPedido,
+            idProducto: cc.idProducto,
+            cantidad: cc.cantidad
+          }        
           
+          this._detallePedidoService.postDetallePedido(detallePedido).subscribe(()=>{
+            
+          })
         })
-      })
-    });
-
-    this._carritoService.removeAllProductosCliente(idCliente);
-    this.router.navigate(['finalizarPedido']);
+      });
+  
+      this._carritoService.removeAllProductosCliente(idCliente);
+      this.router.navigate(['finalizarPedido']);
+    }
+   
     
     
   }

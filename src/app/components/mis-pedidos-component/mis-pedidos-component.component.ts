@@ -33,7 +33,6 @@ export class MisPedidosComponentComponent implements OnInit {
   ngOnInit(): void {
     this.findAllPedidosCliente();
     
-    this.getPrecioProductosCliente();
     
   }
   
@@ -42,10 +41,7 @@ export class MisPedidosComponentComponent implements OnInit {
     const idCliente:string = localStorage.getItem('idCliente') || '';
       this._pedidoService.findAllPedidosCliente(idCliente).subscribe((data) =>{
         this.pedidosRealizadosCliente = data
-        console.log("data: ", data);
-        
-        console.log("Pedidos cliente ", this.pedidosRealizadosCliente);
-        
+    
         this.getDetallePedidos();
       })
       
@@ -64,21 +60,20 @@ export class MisPedidosComponentComponent implements OnInit {
   }
 
   getProductoCliente(){
-    console.log("Detalle: ", this.detalleProductosCliente);
 
     for (const prc of this.detalleProductosCliente){
-      console.log("id: ", prc.idProducto);
+
       
     }
     
     
     this.detalleProductosCliente?.forEach(dpc => {  
-      console.log("dpc", dpc.idProducto);
-      
       this._productoService.getProducto(dpc.idProducto.toString()).subscribe(data=>{
         this.productosCliente.push(data)
       })
     })
+    this.getPrecioProductosCliente();
+    
 
   }
 
@@ -87,6 +82,7 @@ export class MisPedidosComponentComponent implements OnInit {
       this._precioProductoService.getPrecioProducto(cc.idProducto).subscribe(data=>{
         
         this.precioProductosCliente.push(data);
+        
       });
         
       });

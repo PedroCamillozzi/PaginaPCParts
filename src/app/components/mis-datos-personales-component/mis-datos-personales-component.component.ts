@@ -32,21 +32,23 @@ export class MisDatosPersonalesComponentComponent implements OnInit {
 
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.getDatosCliente();
+  ngOnInit(): void {
+    this.getDatosCliente();
 
   }
 
 
-  async getDatosCliente(){
+  getDatosCliente(){
     const idCliente = localStorage.getItem('idCliente') || '';
-    this._clienteService.getDatosCliente(idCliente).subscribe(data =>{
-      this.cliente = data
-      this.name = this.cliente.nombre || '';
-      this.lastName = this.cliente.apellido || '';
-      this.phone = this.cliente.telefono || '';
-      
-    })
+    if(idCliente != ''){
+      this._clienteService.getDatosCliente(idCliente).subscribe(data =>{
+        this.cliente = data
+        this.name = this.cliente.nombre || '';
+        this.lastName = this.cliente.apellido || '';
+        this.phone = this.cliente.telefono || '';
+        
+      })
+    }
 
   }
 

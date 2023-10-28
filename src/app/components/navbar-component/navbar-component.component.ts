@@ -1,24 +1,29 @@
-import { Component, Injectable, OnInit } from '@angular/core';
+import { Component, Injectable, NgModule, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthInterceptor } from 'src/app/Interceptor/auth.interceptor';
+import { DetallePedidos } from 'src/app/interfaces/DetallePedido';
+import { PrecioProducto } from 'src/app/interfaces/PrecioProductos';
 import { Producto } from 'src/app/interfaces/Producto';
 import { LogueoService } from 'src/app/services/logueo.service';
+import { PrecioProductoService } from 'src/app/services/precioProducto.service';
 import { ProductoService } from 'src/app/services/producto.service';
 
-@Injectable()
+
 @Component({
   selector: 'app-navbar-component',
   templateUrl: './navbar-component.component.html',
   styleUrls: ['./navbar-component.component.css']
 })
+
 export class NavbarComponentComponent implements OnInit {
   logueado:boolean= false;
-  filtro:String='';
   todosLosProdutos:Producto[]=[];
   productosFiltrados: Producto[] = [];
+  precioProductosCliente:PrecioProducto[]=[];
+  droplistFiltrado:boolean = true;
 
 
-  constructor( private routes: Router, private _auth: AuthInterceptor, private _logService: LogueoService, private _productoService:ProductoService ){
+  constructor( private routes: Router, private _logService: LogueoService, private _productoService:ProductoService, private _precioProductoService: PrecioProductoService ){
     
     //console.log("atributo ",this.logueado);
     //console.log("funcion: ",this.authentificarLogueo());
@@ -26,8 +31,9 @@ export class NavbarComponentComponent implements OnInit {
     
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.getProductosFiltrados();
+  ngOnInit(): void {
+    this.getProductosFiltrados();
+    
     this.logueado = this.authentificarLogueo();
   }
 
@@ -73,22 +79,45 @@ export class NavbarComponentComponent implements OnInit {
     this.routes.navigate(['misPedidos/'+ idCliente])
   }
 
-  async getProductosFiltrados(){
+  getProductosFiltrados(){
     this._productoService.getProductos().subscribe(data => {
       this.todosLosProdutos = data
+      
+      this.getPrecioProductosCliente();
     });
     
   }
 
-  filtradoProducto(){
-    console.log(this.filtro);
+
+
+  filtradoProducto(filtro:string){
+    this.droplistFiltrado = false;
     this.productosFiltrados = this.todosLosProdutos.filter((todosLosProdutos) =>
-    todosLosProdutos.nombreProducto.toLowerCase().includes(this.filtro.toLowerCase())
-  );
-  console.log(this.filtro);
-  console.log(this.productosFiltrados);
+    todosLosProdutos.nombreProducto.toLowerCase().includes(filtro.toLowerCase())
+  ); 
   
+  }
+  cerrarDroplistFiltrado(){
+    
+    this.droplistFiltrado = true;
+  }
+
+
+  getPrecioProductosCliente(){
+    this.todosLosProdutos?.forEach(tp => {
+      this._precioProductoService.getPrecioProducto(tp.idProducto).subscribe(data=>{
+        
+        this.precioProductosCliente.push(data);
+        
+      });
+        
+      });
   
+      
+  }
+
+  redirectToProducto(idProducto:number){
+    this.routes.navigate(['producto/'+idProducto]);
   }
 
 

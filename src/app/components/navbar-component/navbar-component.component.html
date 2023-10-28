@@ -81,7 +81,41 @@
   </nav>
   <div class="container">
     <form class="d-flex mt-3 mb-3" role="search">
-      <input  class="form-control me-2" type="text" [(ngModel)]="filtro" (input)="filtradoProducto()"  placeholder="Buscar" aria-label="Search">
+      <input class="form-control me-2" type="text"  (input)="filtradoProducto(filtro.value)" (focusout)="cerrarDroplistFiltrado()" placeholder="Buscar" aria-label="Search" #filtro>
       <button class="btn btn-outline-success" type="submit">Buscar</button>
+      
     </form>
+    <div class="list-group" *ngIf="!droplistFiltrado">
+      <a> <div *ngFor=" let pf of productosFiltrados;">
+        <div class="card mb-3 mt-3" style="max-height: 170px;">
+          <div class="row g-0">
+            <div class="col-md-4" style="width: 17%;">
+              <img src="..." class="img-fluid rounded-start" alt="...">
+            </div>
+            <div class="col-md-8">
+              <div   class="card-body">
+                <h5  class="card-title" ><a (click)="redirectToProducto(pf.idProducto)" style="cursor: pointer;">{{pf.nombreProducto}}</a></h5>
+              </div>
+            </div>
+            <div class="col-md-4 cant">
+              <div >
+                <div>
+                  <div *ngFor="let ppc of precioProductosCliente;">
+                    <div class="lblSubTotal" *ngIf="ppc.idProducto == pf.idProducto">
+                      <p>Precio C/U: ${{ppc.precio}}</p>
+                    </div>
+                    
+                  </div>
+                  
+                </div>
+                  
+              </div>
+             
+          </div>
+
+          </div>
+      </div>
+
+      </div></a>
+    </div>
   </div>
