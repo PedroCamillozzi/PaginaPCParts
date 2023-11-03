@@ -2,10 +2,29 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponentComponent } from './login-component.component';
 import { LogueoService } from 'src/app/services/logueo.service';
+import { ClienteService } from 'src/app/services/cliente.service';
 
 class LogueoServiceMock{
   tokenExpirado(){
     return
+  }
+}
+
+class ClienteServiceMock{
+  signIn(){
+    return;
+  }
+  login(){
+    return;
+  }
+  getDatosCliente(){
+    return;
+  }
+  patchcambiarDatosCliente(){
+    return;
+  }
+  patchcambiarContraseñaCliente(){
+    return;
   }
 }
 
@@ -17,7 +36,8 @@ describe('LoginComponentComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [LoginComponentComponent],
-      providers:[{ provide: LogueoService, useClass: LogueoServiceMock}
+      providers:[{ provide: LogueoService, useClass: LogueoServiceMock},
+                 { provide: ClienteService , useClass:ClienteServiceMock}
       ]
     });
     fixture = TestBed.createComponent(LoginComponentComponent);

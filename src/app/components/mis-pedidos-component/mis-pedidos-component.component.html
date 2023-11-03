@@ -14,28 +14,30 @@
               <div   class="card-body">
                 <h5  class="card-title" ><a (click)="redirectToProducto(pc.idProducto)" style="cursor: pointer;">{{pc.nombreProducto}}</a></h5>
                 <div *ngFor="let ppc of precioProductosCliente;">
-                  <p *ngIf="ppc.idProducto == pc.idProducto" class="card-text">${{ppc.precio}}</p>
+                  <div *ngIf="ppc.idProducto == pc.idProducto">
+                    <p  class="card-text">${{ppc.precio}}</p>
+                  </div>
                 </div>
                 
               </div>
             </div>
             <div class="col-md-4 cant">
-              <div *ngFor="let dpc of detalleProductosCliente; ">
-                <div *ngIf="dpc.idProducto == pc.idProducto">
-                  <div *ngIf="dpc.cantidad == 1; else elseBlock">
-                    <p >Cantidad: <strong>{{dpc.cantidad}}</strong> Unidad </p>
-                  </div>
-                  <ng-template #elseBlock>
-                    <p >Cantidad: <strong>{{dpc.cantidad}}</strong> Unidades </p>
-                  </ng-template>
-                  <div *ngFor="let ppc of precioProductosCliente;">
-                    <div class="lblSubTotal" *ngIf="ppc.idProducto == pc.idProducto">
-                      <p>Sub-Total: ${{ppc.precio * dpc.cantidad}}</p>
+              <div *ngFor="let dpc of detalleProductosCliente;">
+                <div *ngIf="(dpc.idProducto == pc.idProducto)">
+                    <div *ngIf="dpc.cantidad == 1; else elseBlock">
+                      <p >Cantidad: <strong>{{dpc.cantidad}}</strong> Unidad </p>
+                    </div>
+                    <ng-template #elseBlock>
+                      <p >Cantidad: <strong>{{dpc.cantidad}}</strong> Unidades </p>
+                    </ng-template>
+                    <div *ngFor="let ppc of precioProductosCliente;">
+                      <div class="lblSubTotal" *ngIf="ppc.idProducto == pc.idProducto">
+                        <p>Sub-Total: ${{ppc.precio * dpc.cantidad}}</p>
+                    </div>
+                      
                     </div>
                     
                   </div>
-                  
-                </div>
                   
               </div>
              
@@ -46,7 +48,7 @@
 
       </div>
     </div>
-    <div class="div-buy">
+  <div class="div-buy">
 
 </div>
     

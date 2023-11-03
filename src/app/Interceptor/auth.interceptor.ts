@@ -17,8 +17,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const token = localStorage.getItem('token');
-    console.log(token);
-    
     if (token) {
       req = req.clone({
         setHeaders: {
@@ -35,7 +33,7 @@ export class AuthInterceptor implements HttpInterceptor {
           this.router.navigate(['/home']);
           }
 
-          return throwError(() => new Error())
+          return throwError(() => error)
         })
       );
     

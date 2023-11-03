@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Producto } from 'src/app/interfaces/Producto';
-import { ProductoService } from 'src/app/services/producto.service';
+import { Producto } from '../../interfaces/Producto';
+import { ProductoService } from '../../services/producto.service';
 
 @Component({
   selector: 'app-producto-component',
@@ -17,15 +17,15 @@ export class ProductoComponentComponent implements OnInit {
               private _activatedRoute:ActivatedRoute,
               private router:Router,
               private toastr:ToastrService){
+  
+  }
+
+  ngOnInit(): void {
     this._activatedRoute.paramMap.subscribe(params =>{
       const data = params.get('id') || '';
       this.idProducto = data;
     })
     this.getProducto()
-  }
-
-  ngOnInit(): void {
-  
   }
 
   getProducto(){
@@ -39,7 +39,8 @@ export class ProductoComponentComponent implements OnInit {
     const token:string = localStorage.getItem('token') || "";
 
     if(token !== null && token !== ""){
-      this.router.navigate(['carrito/'+this.producto.idProducto]);
+      const idCliente:string = localStorage.getItem('idCliente') || '';
+      this.router.navigate(['carrito/'+ idCliente + '/' + this.idProducto]);
       return 
     }
     this.toastr.error("Debe ingresar para poder añadir productos al carrito", 'Acción Inválida');

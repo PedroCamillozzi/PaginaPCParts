@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environment/environment';
+import { environment } from '../../environment/environment';
 import { HttpClient } from '@angular/common/http';
 import { Carrito } from '../interfaces/Carrito';
 

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environment/environment';
+import { environment } from '../../environment/environment';
 import { Pedido } from '../interfaces/Pedido';
 import { Observable } from 'rxjs';
 
@@ -20,7 +20,8 @@ export class PedidoService {
     return this.http.get<Pedido[]>(this.myAppUrl+this.myApiUrl+'/'+idCliente)
   }
 
-  postPedidoCliente(pedido:any):Observable<any>{
-    return this.http.post(this.myAppUrl+this.myApiUrl, pedido);
+  postPedidoCliente(idCliente:string):Observable<any>{
+    const cliente = {idCliente: idCliente}
+    return this.http.post(this.myAppUrl+this.myApiUrl, cliente);
   }
 }

@@ -7,7 +7,7 @@ import { ProductosComponentComponent } from './components/productos-component/pr
 import { ProductoComponentComponent } from './components/producto-component/producto-component.component';
 import { CarritoComponentComponent } from './components/carrito-component/carrito-component.component';
 import { RegistroComponentComponent } from './components/registro-component/registro-component.component';
-import { RouterModule, Routes } from '@angular/router';
+import { Router, RouterModule, Routes } from '@angular/router';
 import { SharedModule } from './shared/shared';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponentComponent } from './components/login-component/login-component.component';
@@ -19,21 +19,21 @@ import { AuthInterceptor } from './Interceptor/auth.interceptor';
 import { MisDatosPersonalesComponentComponent } from './components/mis-datos-personales-component/mis-datos-personales-component.component';
 import { MisPedidosComponentComponent } from './components/mis-pedidos-component/mis-pedidos-component.component';
 import { GraciasPorSucompraComponent } from './components/gracias-por-sucompra/gracias-por-sucompra.component';
-import { AuthGuardService } from './Guards/auth.guard.service';
+import { Authentication } from './Guards/authentication.guard';
+
 
 const routes:Routes=[
   {path:'', component:HomeComponentComponent},
   {path:'home', component:HomeComponentComponent},
-  {path: 'misdatos/:idCliente', component:MisDatosPersonalesComponentComponent},// canActivate: [AuthGuardService]}
-  {path:'home/:idCliente', component:HomeComponentComponent},
+  {path: 'misdatos/:idCliente', component:MisDatosPersonalesComponentComponent, canActivate: [Authentication]},
   {path:'productos', component:ProductosComponentComponent},
   //{path:'productos/:idCliente', component:ProductosComponentComponent},
   {path: 'producto/:id', component:ProductoComponentComponent},
-  {path: 'carrito/:idCliente', component:CarritoComponentComponent},// canActivate: [AuthGuardService]},
+  {path: 'carrito/:idCliente', component:CarritoComponentComponent, canActivate: [Authentication]},
   //{path: 'carrito/:idCliente', component:CarritoComponentComponent},
-  {path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},// canActivate: [AuthGuardService]},
-  {path: 'finalizarPedido', component:GraciasPorSucompraComponent},
-  {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent},
+  {path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent, canActivate: [Authentication]},
+  {path: 'finalizarPedido', component:GraciasPorSucompraComponent, canActivate: [Authentication]},
+  {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent, canActivate: [Authentication]},
  
   //{path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},
   {path:'**', component: HomeComponentComponent},
@@ -72,7 +72,7 @@ const routes:Routes=[
               useClass: AuthInterceptor,
               multi:true
               },
-              /*AuthGuardService*/],
+              Authentication],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

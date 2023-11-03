@@ -2,17 +2,16 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Carrito } from 'src/app/interfaces/Carrito';
-import { DetallePedidos } from 'src/app/interfaces/DetallePedido.js';
-import { Pedido } from 'src/app/interfaces/Pedido.js';
-import { PrecioProducto } from 'src/app/interfaces/PrecioProductos';
-import { Producto } from 'src/app/interfaces/Producto';
-import { CarritoService } from 'src/app/services/carrito.service';
-import { DetallePedidoService } from 'src/app/services/detallePedido.service';
-import { ErrorService } from 'src/app/services/error.service';
-import { PedidoService } from 'src/app/services/pedido.service';
-import { PrecioProductoService } from 'src/app/services/precioProducto.service';
-import { ProductoService } from 'src/app/services/producto.service';
+import { Carrito } from '../../interfaces/Carrito';
+import { DetallePedidos } from '../../interfaces/DetallePedido.js';
+import { PrecioProducto } from '../../interfaces/PrecioProductos';
+import { Producto } from '../../interfaces/Producto';
+import { CarritoService } from '../../services/carrito.service';
+import { DetallePedidoService } from '../../services/detallePedido.service';
+import { ErrorService } from '../../services/error.service';
+import { PedidoService } from '../../services/pedido.service';
+import { PrecioProductoService } from '../../services/precioProducto.service';
+import { ProductoService } from '../../services/producto.service';
 
 @Component({
   selector: 'app-carrito-component',
@@ -48,6 +47,7 @@ export class CarritoComponentComponent implements OnInit {
     const idCliente: string = localStorage.getItem('idCliente') || '';
     if(idCliente != ''){
       this._carritoService.getProductosCarritoCliente(idCliente).subscribe(data=>{
+
         this.carritoCliente = data
         this.getProductoCliente();
       })
@@ -87,7 +87,7 @@ getPrecioProductosCliente(){
       }
       this._carritoService.patchProductoCarritoCliente(carritoCliente).subscribe({
         next: (data)=>{
-             this.getCarritoCliente();
+         this.router.navigate(['carrito/'+ idCliente])
         },
         error: (err:HttpErrorResponse) => {
           this._errorService.msjError(err);
@@ -127,8 +127,10 @@ getPrecioProductosCliente(){
         c.cantidad++
 
         this._carritoService.patchModificarCantidadCarritoCliente(c).subscribe(data =>{
-          console.log(data);
-          
+          this._precioProductoService.getPrecioProducto(pc.idProducto).subscribe(dataPrecioProducto =>{
+            const precio:number = dataPrecioProducto.precio
+            this.total += Number(precio);
+          })
         })
      
       }
@@ -143,8 +145,10 @@ getPrecioProductosCliente(){
         c.cantidad--
 
         this._carritoService.patchModificarCantidadCarritoCliente(c).subscribe(data =>{
-          console.log(data);
-          
+          this._precioProductoService.getPrecioProducto(pc.idProducto).subscribe(dataPrecioProducto =>{
+            const precio:number = dataPrecioProducto.precio
+            this.total -= Number(precio);
+          })
         })
         
       }
@@ -153,9 +157,8 @@ getPrecioProductosCliente(){
 
   eliminarDelCarrito(c:Carrito){
     this._carritoService.removeProductoCarritoCliente(c).subscribe(data => {
-      console.log(data);
-      
     })
+    window.location.reload();
 
   }
 
@@ -169,6 +172,7 @@ getPrecioProductosCliente(){
       return
     }
     const idCliente = localStorage.getItem('idCliente') || '';
+    
     
     if(idCliente != ''){
       this.carritoCliente?.forEach(cc => {
@@ -185,7 +189,9 @@ getPrecioProductosCliente(){
         })
       });
   
-      this._carritoService.removeAllProductosCliente(idCliente);
+      this._carritoService.removeAllProductosCliente(idCliente).subscribe(()=>{
+        
+      });
       this.router.navigate(['finalizarPedido']);
     }
    

@@ -33,3 +33,9 @@
     height: 60px;
     width: 100%;
 }
+
+.carritoCompras{
+    max-width: 30px;
+    max-height: 30px;
+    margin-right: 10px;
+}

@@ -1,9 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Cliente } from 'src/app/interfaces/Cliente';
-import { ClienteService } from 'src/app/services/cliente.service';
-import { ErrorService } from 'src/app/services/error.service';
+import { Cliente } from '../../interfaces/Cliente';
+import { ClienteService } from '../../services/cliente.service';
+import { ErrorService } from '../../services/error.service';
 
 @Component({
   selector: 'app-registro-component',

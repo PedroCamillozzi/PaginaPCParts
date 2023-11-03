@@ -1,12 +1,10 @@
-import { Component, Injectable, NgModule, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DetallePedidos } from 'src/app/interfaces/DetallePedido';
-import { PrecioProducto } from 'src/app/interfaces/PrecioProductos';
-import { Producto } from 'src/app/interfaces/Producto';
-import { LogueoService } from 'src/app/services/logueo.service';
-import { PrecioProductoService } from 'src/app/services/precioProducto.service';
-import { ProductoService } from 'src/app/services/producto.service';
+import { PrecioProducto } from '../../interfaces/PrecioProductos';
+import { Producto } from '../../interfaces/Producto';
+import { LogueoService } from '../../services/logueo.service';
+import { PrecioProductoService } from '../../services/precioProducto.service';
+import { ProductoService } from '../../services/producto.service';
 
 
 @Component({
@@ -98,8 +96,9 @@ export class NavbarComponentComponent implements OnInit {
   
   }
   cerrarDroplistFiltrado(){
-    
-    this.droplistFiltrado = true;
+    setTimeout(() => {
+      this.droplistFiltrado = true;
+    }, 100);
   }
 
 
@@ -117,7 +116,9 @@ export class NavbarComponentComponent implements OnInit {
   }
 
   redirectToProducto(idProducto:number){
-    this.routes.navigate(['producto/'+idProducto]);
+    this.routes.navigateByUrl('/refresh', { skipLocationChange: true }).then(() => {
+      this.routes.navigate(['producto/'+idProducto]);
+    });
   }
 
 

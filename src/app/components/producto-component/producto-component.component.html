@@ -29,7 +29,12 @@
             <p class="card-text">{{producto.detallesGenerales}}</p> 
         </div>
         <div class="buy-button">
-            <button (click)="loginVerify()" type="button" class="btn btn-success">(Añadir Imagen carrito)Añadir al Carrito</button>
+            <button (click)="loginVerify()" type="button" class="btn btn-success">
+                <div>
+                    <img class="carritoCompras" src="../../../assets/images/carritoCompras.png" alt="">
+                <span>Añadir al Carrito</span>
+                </div>
+            </button>
         </div>
     </div>
 </div>

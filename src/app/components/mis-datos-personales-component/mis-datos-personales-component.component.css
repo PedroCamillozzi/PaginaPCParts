@@ -7,8 +7,9 @@ width: 25%
 }
 
 .foto{
-    width: 95% ;
-    height: 50%;
+    max-width: 297px;
+    max-height: 167px;
+    transform:translate(50%, 20%);
 }
 
 .contenedor{

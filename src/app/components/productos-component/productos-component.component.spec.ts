@@ -2,6 +2,34 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProductosComponentComponent } from './productos-component.component';
 import { Router } from '@angular/router';
+import { ProductoService } from '../../services/producto.service';
+import { PrecioProductoService } from '../../services/precioProducto.service';
+import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
+
+class ProductoServiceMock{
+  getProductos():Observable<any>{
+    const producto:any = null
+    return producto ;
+  }
+  getProducto(){
+    return;
+  }
+}
+
+class PrecioProductoServiceMock{
+  getPrecioProducto(){
+    return;
+  }
+}
+
+class ToastrServiceMock{
+
+}
+
+class RouterMock{
+
+}
 
 describe('ProductosComponentComponent', () => {
   let component: ProductosComponentComponent;
@@ -9,7 +37,11 @@ describe('ProductosComponentComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProductosComponentComponent]
+      declarations: [ProductosComponentComponent],
+      providers: [{provide: ProductoService, useClass: ProductoServiceMock},
+                  {provide: PrecioProductoService, useClass: PrecioProductoServiceMock},
+                  {provide: ToastrService, useClass: ToastrServiceMock},
+                  {provide: Router, useClass: RouterMock}]
     });
     fixture = TestBed.createComponent(ProductosComponentComponent);
     component = fixture.componentInstance;

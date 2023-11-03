@@ -4,11 +4,11 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
-import { Categoria } from 'src/app/interfaces/Categoria';
-import { PrecioProducto } from 'src/app/interfaces/PrecioProductos';
-import { Producto } from 'src/app/interfaces/Producto';
-import { PrecioProductoService } from 'src/app/services/precioProducto.service';
-import { ProductoService } from 'src/app/services/producto.service';
+import { Categoria } from '../../interfaces/Categoria';
+import { PrecioProducto } from '../../interfaces/PrecioProductos';
+import { Producto } from '../../interfaces/Producto';
+import { PrecioProductoService } from '../../services/precioProducto.service';
+import { ProductoService } from '../../services/producto.service';
 
 
 

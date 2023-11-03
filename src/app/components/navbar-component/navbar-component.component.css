@@ -11,3 +11,18 @@
 .lblSubTotal{
     font-weight: bold;
 }
+
+.imagenCarrito{
+    max-width: 30px;
+    max-height: 30px;
+}
+
+.btn-carrito{
+    border: unset;
+    background: darkgrey;
+}
+
+.imgPerfil{
+    max-width: 59px;
+    max-height: 40px;
+}
