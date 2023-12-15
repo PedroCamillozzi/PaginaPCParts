@@ -19,21 +19,21 @@ import { AuthInterceptor } from './Interceptor/auth.interceptor';
 import { MisDatosPersonalesComponentComponent } from './components/mis-datos-personales-component/mis-datos-personales-component.component';
 import { MisPedidosComponentComponent } from './components/mis-pedidos-component/mis-pedidos-component.component';
 import { GraciasPorSucompraComponent } from './components/gracias-por-sucompra/gracias-por-sucompra.component';
-import { Authentication } from './Guards/authentication.guard';
+import { authGuard } from './Guards/authentication.guard';
 
 
 const routes:Routes=[
   {path:'', component:HomeComponentComponent},
   {path:'home', component:HomeComponentComponent},
-  {path: 'misdatos/:idCliente', component:MisDatosPersonalesComponentComponent, canActivate: [Authentication]},
+  {path: 'misdatos/:idCliente', component:MisDatosPersonalesComponentComponent, canActivate: [authGuard]},
   {path:'productos', component:ProductosComponentComponent},
   //{path:'productos/:idCliente', component:ProductosComponentComponent},
   {path: 'producto/:id', component:ProductoComponentComponent},
-  {path: 'carrito/:idCliente', component:CarritoComponentComponent, canActivate: [Authentication]},
+  {path: 'carrito/:idCliente', component:CarritoComponentComponent, canActivate: [authGuard]},
   //{path: 'carrito/:idCliente', component:CarritoComponentComponent},
-  {path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent, canActivate: [Authentication]},
-  {path: 'finalizarPedido', component:GraciasPorSucompraComponent, canActivate: [Authentication]},
-  {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent, canActivate: [Authentication]},
+  {path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent, canActivate: [authGuard]},
+  {path: 'finalizarPedido', component:GraciasPorSucompraComponent, canActivate: [authGuard]},
+  {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent, canActivate: [authGuard]},
  
   //{path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},
   {path:'**', component: HomeComponentComponent},
@@ -72,7 +72,7 @@ const routes:Routes=[
               useClass: AuthInterceptor,
               multi:true
               },
-              Authentication],
+              ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
