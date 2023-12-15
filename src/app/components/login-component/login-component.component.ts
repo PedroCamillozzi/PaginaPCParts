@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { Cliente } from '../../interfaces/Cliente';
 import { ClienteService } from '../../services/cliente.service';
 import { ErrorService } from '../../services/error.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login-component',
@@ -12,18 +12,22 @@ import { ErrorService } from '../../services/error.service';
   styleUrls: ['./login-component.component.css']
 })
 export class LoginComponentComponent implements OnInit{
-  email:string='';
-  password:string='';
   loading:boolean=false;
+  loginForm:FormGroup;
+  emailError:boolean = false;
 
   @Output() dataToParent: EventEmitter<boolean> = new EventEmitter<boolean>();
   logueado:boolean= false;
 
-  constructor(private toastr:ToastrService,
+  constructor(
               private _clienteService:ClienteService,
               private router:Router,
-              private _errorService:ErrorService){
-
+              private _errorService:ErrorService,
+              private formBuilder:FormBuilder){
+                this.loginForm = this.formBuilder.group({
+                  email: ['', [Validators.required, Validators.email]],
+                  password: ['', [Validators.required]]
+                });
   }
 
   ngOnInit(): void {
@@ -32,14 +36,9 @@ export class LoginComponentComponent implements OnInit{
 
   login(){
 
-    if(this.email == '' || this.password == ''){
-      this.toastr.error('Todos los campos son obligatorios', 'Error')
-      return
-    }
-
     const cliente:Cliente = {
-      email: this.email,
-      contraseña: this.password
+      email: this.loginForm.get('email')?.value,
+      contraseña: this.loginForm.get('password')?.value
     }
 
   

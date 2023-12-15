@@ -10,3 +10,9 @@
 .size-inputs{
     width: 100%;
 }
+
+.lblError{
+    font-size: x-small;
+    color: red;
+    transform: translate(5px, -4px);
+}

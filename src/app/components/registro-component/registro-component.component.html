@@ -3,43 +3,48 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-    <form>
+    <form [formGroup]="formularioRegistro">
         <div class="mb-3">
-            <div class="size">
-                <div class="size-inputs">
-            <label for="exampleInputEmail1" class="form-label">Nombre</label>
-            <input  type="email" [(ngModel)]="name" name="name" class="form-control">
-                </div>
-                <div class="disposicion size-inputs">
-                <label for="exampleInputEmail1" class="form-label">Apellido</label>
-                <input  type="email" [(ngModel)]="lastName" name="lastName" class="form-control"  >
-                </div>
+          <div class="size">
+            <div (keypress)="nameValidate()" class="size-inputs">
+              <label for="name" class="form-label">Nombre</label>
+              <input formControlName="name" class="form-control">
+              <label *ngIf="nameError" class="lblError" >*El Nombre no debe superar los 50 caracteres</label>
             </div>
+            <div (keypress)="lastNameValidate()" class="disposicion size-inputs">
+              <label for="lastName" class="form-label">Apellido</label>
+              <input formControlName="lastName" class="form-control">
+              <label *ngIf="lastNameError" class="lblError">*El Apellido no debe superar los 50 caracteres</label>
+            </div>
+          </div>
         </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">DNI</label>
-            <input  type="email" [(ngModel)]="dni" name="dni" class="form-control">
+        <div (keypress)="dniValidate()" class="mb-3">
+          <label for="dni" class="form-label">DNI</label>
+          <input formControlName="dni" class="form-control">
+          <label *ngIf="dniError" class="lblError">*El DNI no debe contener letras y no debe superar los 8 números</label>
         </div>
-        <div class="mb-3">
-            <label for="exampleInputEmail1" class="form-label">Teléfono</label>
-            <input  type="email" [(ngModel)]="phone" name="phone" class="form-control" aria-describedby="emailHelp">
+        <div (keypress)="phoneValidate()" class="mb-3">
+          <label for="phone" class="form-label">Teléfono</label>
+          <input formControlName="phone" class="form-control" aria-describedby="emailHelp">
+          <label *ngIf="phoneError" class="lblError">*El Teléfono no debe contener letras y no debe superar los 10 números</label>
         </div>
-        <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label">Dirección de Correo</label>
-          <input  type="email" [(ngModel)]="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <div (focusout)="emailValidate()" class="mb-3">
+          <label for="email" class="form-label">Dirección de Correo</label>
+          <input formControlName="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <label *ngIf="emailError" class="lblError">*El email debe ser válido</label>
         </div>
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Constraseña</label>
-          <input type="password" [(ngModel)]="password" name="password" class="form-control" id="exampleInputPassword1">
+        <div (focusout)="passwordValidate()" class="mb-3">
+          <label for="password" class="form-label">Contraseña</label>
+          <input formControlName="password" type="password" class="form-control" id="exampleInputPassword1">
+          <label *ngIf="passwordError" class="lblError">*La contraseña debe ser mayor a 6 caracteres</label>
         </div>
-        <div class="mb-3">
-            <label for="exampleInputPassword1" class="form-label">Repetir Contraseña</label>
-            <input type="password" [(ngModel)]="repeatPassword" name="password" class="form-control" id="exampleInputPassword1">
+        <div (focusout)="repeatPasswordValidate()" class="mb-3">
+          <label for="repeatPassword" class="form-label">Repetir Contraseña</label>
+          <input formControlName="repeatPassword" type="password" class="form-control" id="exampleInputPassword1">
+          <label *ngIf="repeatPassworError" class="lblError">*Las contraseñas no coinciden</label>
         </div>
-
-    </form>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-    <button type="submit" class="btn btn-primary" (click)="registrar()" data-bs-dismiss="modal">Registrarse</button>
-</div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="registrar()" [disabled]="formularioRegistro.invalid">Registrarse</button>
+      </div>

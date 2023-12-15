@@ -12,7 +12,7 @@ import { SharedModule } from './shared/shared';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponentComponent } from './components/login-component/login-component.component';
 import { NavbarComponentComponent } from './components/navbar-component/navbar-component.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './Interceptor/auth.interceptor';
@@ -62,6 +62,7 @@ const routes:Routes=[
     SharedModule,
     BrowserAnimationsModule,
     FormsModule,
+    ReactiveFormsModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',
