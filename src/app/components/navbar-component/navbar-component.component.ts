@@ -47,18 +47,11 @@ export class NavbarComponentComponent implements OnInit {
 
   authentificarLogueo():boolean{
     const token:string = localStorage.getItem('token') || "";
-   // console.log("token: ", token);
-   // console.log("token expirado", !this._logService.tokenExpirado(token));
-   // console.log("token distinto de nulo: ", token !== null);
-    
-    
-    if(token !== null && token !== "" /*&& !this._logService.tokenExpirado(token)*/){
-      //console.log("entro en true");
-      
-      return true
+
+    if(this._logService.tokenExpirado(token)){
+      return false;
     }
-   // console.log("entro en false");
-    return false;
+    return true;
 
   }
 

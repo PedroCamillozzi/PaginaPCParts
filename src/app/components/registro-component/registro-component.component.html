@@ -30,17 +30,17 @@
         </div>
         <div (focusout)="emailValidate()" class="mb-3">
           <label for="email" class="form-label">Dirección de Correo</label>
-          <input formControlName="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+          <input formControlName="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp">
           <label *ngIf="emailError" class="lblError">*El email debe ser válido</label>
         </div>
         <div (focusout)="passwordValidate()" class="mb-3">
           <label for="password" class="form-label">Contraseña</label>
-          <input formControlName="password" type="password" class="form-control" id="exampleInputPassword1">
+          <input formControlName="password" type="password" class="form-control" id="exampleInputPassword">
           <label *ngIf="passwordError" class="lblError">*La contraseña debe ser mayor a 6 caracteres</label>
         </div>
         <div (focusout)="repeatPasswordValidate()" class="mb-3">
           <label for="repeatPassword" class="form-label">Repetir Contraseña</label>
-          <input formControlName="repeatPassword" type="password" class="form-control" id="exampleInputPassword1">
+          <input formControlName="repeatPassword" type="password" class="form-control" id="exampleInputRepeatPassword">
           <label *ngIf="repeatPassworError" class="lblError">*Las contraseñas no coinciden</label>
         </div>
       </form>
