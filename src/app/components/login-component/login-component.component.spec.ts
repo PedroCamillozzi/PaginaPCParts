@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponentComponent } from './login-component.component';
-import { LogueoService } from 'src/app/services/logueo.service';
-import { ClienteService } from 'src/app/services/cliente.service';
+import { LogueoService } from '../../services/logueo.service';
+import { ClienteService } from '../../services/cliente.service';
 
 class LogueoServiceMock{
   tokenExpirado(){

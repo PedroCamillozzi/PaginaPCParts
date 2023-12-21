@@ -4,36 +4,43 @@
 
 <div class="containerA">
     <div style="width: 95%; margin-left: 2.5%;">
-      <div *ngFor=" let pc of productosCliente;">
+      <div *ngFor=" let pc of pedidosRealizadosCliente;">
         <div class="card mb-3 mt-3" style="max-height: 170px;">
           <div class="row g-0">
             <div class="col-md-4" style="width: 17%;">
-              <img src="..." class="img-fluid rounded-start" alt="...">
+              <img src="../../../assets/images/celeron.jpg" class="img-fluid rounded-start" alt="...">
             </div>
             <div class="col-md-8">
               <div   class="card-body">
-                <h5  class="card-title" ><a (click)="redirectToProducto(pc.idProducto)" style="cursor: pointer;">{{pc.nombreProducto}}</a></h5>
-                <div *ngFor="let ppc of precioProductosCliente;">
-                  <div *ngIf="ppc.idProducto == pc.idProducto">
-                    <p  class="card-text">${{ppc.precio}}</p>
+                <div style="display: flex; flex-direction: row;">
+                  <h6  class="card-title"  style="transform: translate(0px, -15px);" ><a >Nro. de Pedido: {{pc.idPedido}}</a></h6>
+                  <p style="transform: translate(143px, -17px);">Fecha pedido: {{returnOnlyDate(pc.fechaPedido)}}</p>
+                </div>
+                <h5  class="card-title" style="transform: translate(0px, -10px);"><a (click)="redirectToProducto(pc.dp.pro.idProducto)" style="cursor: pointer;">{{pc.dp.pro.nombreProducto}}</a></h5>
+                <div>
+                  <div>
+                    <p  class="card-text">${{pc.dp.pro.precios[0].precio}}</p>
                   </div>
                 </div>
                 
               </div>
             </div>
             <div class="col-md-4 cant">
-              <div *ngFor="let dpc of detalleProductosCliente;">
-                <div *ngIf="(dpc.idProducto == pc.idProducto)">
-                    <div *ngIf="dpc.cantidad == 1; else elseBlock">
-                      <p >Cantidad: <strong>{{dpc.cantidad}}</strong> Unidad </p>
+              <div >
+                <div style="width: 175px; transform: translate(-7px, -8px);">
+                    <div *ngIf="pc.dp.cantidad == 1; else elseBlock">
+                      <p style="    transform: translate(-10px, 0px)">Cantidad: <strong>{{pc.dp.cantidad}}</strong> Unidad </p>
                     </div>
                     <ng-template #elseBlock>
-                      <p >Cantidad: <strong>{{dpc.cantidad}}</strong> Unidades </p>
+                      <p style="    transform: translate(-10px, 0px)">Cantidad: <strong>{{pc.dp.cantidad}}</strong> Unidades </p>
                     </ng-template>
-                    <div *ngFor="let ppc of precioProductosCliente;">
-                      <div class="lblSubTotal" *ngIf="ppc.idProducto == pc.idProducto">
-                        <p>Sub-Total: ${{ppc.precio * dpc.cantidad}}</p>
+                    <div>
+                      <div class="lblSubTotal">
+                        <p style="    transform: translate(-10px, 0px)">Sub-Total: ${{pc.dp.pro.precios[0].precio * pc.dp.cantidad}}</p>
                     </div>
+                    <div>
+                      <p style="transform: translate(-10px, 3px);">Estado: <span style="font-weight: bold;">{{pc.estado}}</span></p>
+                  </div>
                       
                     </div>
                     

@@ -1,0 +1,26 @@
+export interface IProductosCompletos {
+    idPedido:number;
+    fechaPedido:Date;
+    fechaEntrega:Date;
+    estado:string;
+    dp:{
+        idPedido:number;
+        idProducto:number;
+        cantidad:number;
+        pro:{
+            idCliente:number,
+            idProducto:number;
+            nombreProducto:string;
+            descripcion:string;
+            detallesGenerales:string;
+            imagen?:ImageData;
+            stock:number;
+            idCategoria:number;
+            precios:[{
+                idProducto:number;
+                fechaDesde:Date;
+                precio:number;
+            }]
+        }
+    }
+}

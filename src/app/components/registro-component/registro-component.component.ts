@@ -54,7 +54,7 @@ export class RegistroComponentComponent {
 
     this.loading = true;
     this._clienteService.signIn(cliente).subscribe({
-      next:(v) => {
+      next:() => {
         this.loading = false;
         this.toastr.success('Usted ha sido registrado con éxito', 'Hola ' + this.formularioRegistro.get('name')!.value)
       },
@@ -63,10 +63,6 @@ export class RegistroComponentComponent {
         this.loading = false;
       }
     });
-  }
-
-  validaciones(){
-  
   }
 
   nameValidate(){
