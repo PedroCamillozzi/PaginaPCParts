@@ -58,6 +58,7 @@ export class NavbarComponentComponent implements OnInit {
   cerrarSesion(){
     localStorage.removeItem('token');
     localStorage.removeItem('idCliente');
+    localStorage.removeItem('Tipo de Usuario');
   }
 
   redirectToDatosPersonales(){

@@ -1,7 +1,7 @@
 module.exports ={
     displayName:'paginaPcParts',
     maxWorkers:3,
-    bail: true,
+    bail: false,
     preset: 'jest-preset-angular',
     roots: ['<rootDir>/src/'],
     testMatch: ['**/+(*.)+(spec).+(ts)'],

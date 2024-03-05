@@ -37,4 +37,14 @@ constructor(private http:HttpClient) {
   return this.http.patch<any>(this.myAppUrl+this.myApiUrl+'cambiaContrasenia/', cliente)
  }
 
+ tipoUsuario(){
+  const nivel:string = localStorage.getItem('Tipo de Usuario') || "";
+  if(nivel === 'ADMIN'){
+    return 1;
+  }
+  else {
+    return 2;
+  }
+ }
+
 }

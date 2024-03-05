@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Producto } from '../../interfaces/Producto';
 import { ProductoService } from '../../services/producto.service';
+import { PrecioProducto } from '../../interfaces/PrecioProductos';
+import { PrecioProductoService } from '../../services/precioProducto.service';
 
 @Component({
   selector: 'app-producto-component',
@@ -12,9 +14,11 @@ import { ProductoService } from '../../services/producto.service';
 export class ProductoComponentComponent implements OnInit {
   idProducto:string='';
   producto:Producto={} as Producto;
+  precioProducto:PrecioProducto | undefined;
 
   constructor(private _productoService:ProductoService,
               private _activatedRoute:ActivatedRoute,
+              private _precioProductoService:PrecioProductoService,
               private router:Router,
               private toastr:ToastrService){
   
@@ -32,7 +36,16 @@ export class ProductoComponentComponent implements OnInit {
     this._productoService.getProducto(this.idProducto).subscribe(data=>{
       this.producto = data
       console.log(this.producto);
-    })    
+      this.getPrecio(data.idProducto)
+    })
+  }
+
+  getPrecio(idProducto:number){
+    this._precioProductoService.getPrecioProducto(idProducto).subscribe(data =>{
+      this.precioProducto = data;
+      console.log(this.precioProducto);
+      
+    })
   }
 
   loginVerify(){

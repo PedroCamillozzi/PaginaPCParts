@@ -20,6 +20,8 @@ import { MisDatosPersonalesComponentComponent } from './components/mis-datos-per
 import { MisPedidosComponentComponent } from './components/mis-pedidos-component/mis-pedidos-component.component';
 import { GraciasPorSucompraComponent } from './components/gracias-por-sucompra/gracias-por-sucompra.component';
 import { authGuard } from './Guards/authentication.guard';
+import { EditarProductosComponentComponent } from './components/editar-productos-component/editar-productos-component.component';
+import { userLevelGuard } from './Guards/user-level.guard';
 
 
 const routes:Routes=[
@@ -35,7 +37,7 @@ const routes:Routes=[
   {path: 'finalizarPedido', component:GraciasPorSucompraComponent, canActivate: [authGuard]},
   {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent, canActivate: [authGuard]},
  
-  //{path: 'carrito/:idCliente/:idProducto', component:CarritoComponentComponent},
+  {path: 'productoEdit/:idCliente/:idProducto', component:EditarProductosComponentComponent, /*canActivate[userLevelGuard]*/},
   {path:'**', component: HomeComponentComponent},
  
 
@@ -53,7 +55,8 @@ const routes:Routes=[
     NavbarComponentComponent,
     MisDatosPersonalesComponentComponent,
     MisPedidosComponentComponent,
-    GraciasPorSucompraComponent
+    GraciasPorSucompraComponent,
+    EditarProductosComponentComponent
   ],
   imports: [
     BrowserModule,

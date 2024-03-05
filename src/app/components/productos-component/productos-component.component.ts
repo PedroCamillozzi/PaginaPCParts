@@ -9,6 +9,7 @@ import { PrecioProducto } from '../../interfaces/PrecioProductos';
 import { Producto } from '../../interfaces/Producto';
 import { PrecioProductoService } from '../../services/precioProducto.service';
 import { ProductoService } from '../../services/producto.service';
+import { ClienteService } from '../../services/cliente.service';
 
 
 
@@ -58,7 +59,8 @@ export class ProductosComponentComponent implements OnInit {
   constructor(private _productoService:ProductoService,
     private _precioProductoService:PrecioProductoService,
     private router:Router,
-    private toastr:ToastrService){
+    private toastr:ToastrService,
+    private _clienteService:ClienteService){
     this.getProductosAndPrecioActProducto();
     this.dataSource.data = tree_Categoria;
   }
@@ -118,6 +120,28 @@ export class ProductosComponentComponent implements OnInit {
       }
     this.toastr.error("Debe ingresar para poder añadir productos al carrito", 'Acción Inválida');
   
+  }
+
+  esAdmin(){
+    const rta = this._clienteService.tipoUsuario();
+
+    if(rta === 1){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  redirecToEditarProducto(idProducto:Number){
+    const idCliente:string = localStorage.getItem('idCliente') || '';
+
+    if(this.esAdmin()){
+      this.router.navigate(['productoEdit/'+ idCliente + '/' + idProducto]);
+      return
+    }
+    this.toastr.error("No disponible", 'Acción Inválida');
+
   }
 
   ordenarPorTodos(){
