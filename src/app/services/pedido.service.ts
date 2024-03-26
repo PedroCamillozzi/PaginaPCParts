@@ -16,6 +16,11 @@ export class PedidoService {
     this.myApiUrl = 'pedido/'
    }
 
+   
+  findAllPedidos():Observable<any>{
+    return this.http.get(this.myAppUrl+this.myApiUrl+'/all')
+  }
+
   findAllPedidosCliente(idCliente:string):Observable<any>{
     return this.http.get<any>(this.myAppUrl+this.myApiUrl+'/'+idCliente)
   }

@@ -1,4 +1,4 @@
-export interface Producto{
+export interface ProductoPrecio{
     idProducto:number;
     nombreProducto:string;
     descripcion:string;
@@ -6,4 +6,6 @@ export interface Producto{
     imagen?:ImageData;
     stock:number;
     idCategoria?:number;
+    fechaDesde:Date;
+    precio:number;
 }

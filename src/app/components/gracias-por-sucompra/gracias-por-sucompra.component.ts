@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gracias-por-sucompra',
@@ -7,4 +8,15 @@ import { Component } from '@angular/core';
 })
 export class GraciasPorSucompraComponent {
 
+  
+  constructor(private router:Router){
+    this.redirectToMisPedidos();
+  }
+
+  redirectToMisPedidos(){
+    setTimeout(() => {
+      const idCliente = localStorage.getItem('idCliente');
+      this.router.navigate(['misPedidos/'+ idCliente])
+    }, 1700);
+  }
 }

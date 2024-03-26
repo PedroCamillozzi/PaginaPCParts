@@ -5,6 +5,7 @@ import { Producto } from '../../interfaces/Producto';
 import { LogueoService } from '../../services/logueo.service';
 import { PrecioProductoService } from '../../services/precioProducto.service';
 import { ProductoService } from '../../services/producto.service';
+import { ClienteService } from '../../services/cliente.service';
 
 
 @Component({
@@ -21,7 +22,11 @@ export class NavbarComponentComponent implements OnInit {
   droplistFiltrado:boolean = true;
 
 
-  constructor( private routes: Router, private _logService: LogueoService, private _productoService:ProductoService, private _precioProductoService: PrecioProductoService ){
+  constructor( private routes: Router,
+               private _logService: LogueoService,
+               private _productoService:ProductoService,
+               private _precioProductoService: PrecioProductoService,
+               private _clienteService:ClienteService ){
     
     //console.log("atributo ",this.logueado);
     //console.log("funcion: ",this.authentificarLogueo());
@@ -113,6 +118,27 @@ export class NavbarComponentComponent implements OnInit {
     this.routes.navigateByUrl('/refresh', { skipLocationChange: true }).then(() => {
       this.routes.navigate(['producto/'+idProducto]);
     });
+  }
+
+  esAdmin(){
+    const rta = this._clienteService.tipoUsuario();
+
+    if(rta === 1){
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  redirectToAdministrarPedidos(){
+    const idCliente = localStorage.getItem('idCliente');
+
+    this.routes.navigate(['administrarPedidos/'+idCliente]);
+  }
+
+  redirectToAgregarProducto(){
+    this.routes.navigate(['agregarProducto']);
   }
 
 

@@ -20,9 +20,19 @@
 .btn-carrito{
     border: unset;
     background: darkgrey;
+    transform: translate(30px);
 }
 
 .imgPerfil{
     max-width: 59px;
     max-height: 40px;
+}
+
+.img-listado{
+    max-width: 10rem;
+    max-height: 10rem;
+}
+
+.container1{
+    padding-right: 3rem;
 }

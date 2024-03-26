@@ -67,6 +67,8 @@
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" (click)="redirectToPedidosCliente()" style="cursor: pointer;">Mis Pedidos</a></li>
                   <li><a (click)="redirectToDatosPersonales()" class="dropdown-item" style="cursor: pointer;">Datos Personales</a></li>
+                  <li><a *ngIf="esAdmin()" (click)="redirectToAdministrarPedidos()" class="dropdown-item" style="cursor: pointer;">Administrar Pedidos</a></li>
+                  <li><a *ngIf="esAdmin()" (click)="redirectToAgregarProducto()" class="dropdown-item" style="cursor: pointer;">Agregar Producto</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a (click)="cerrarSesion()" class="dropdown-item" href=''>Cerrar Sesión</a></li>
                 </ul>
@@ -90,7 +92,7 @@
         <div class="card mb-3 mt-3" style="max-height: 170px;">
           <div class="row g-0">
             <div class="col-md-4" style="width: 17%;">
-              <img src="..." class="img-fluid rounded-start" alt="...">
+              <img src="../../../assets/images/celeron.jpg" class="img-fluid rounded-start img-listado" alt="...">
             </div>
             <div class="col-md-8">
               <div   class="card-body">

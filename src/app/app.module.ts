@@ -22,6 +22,8 @@ import { GraciasPorSucompraComponent } from './components/gracias-por-sucompra/g
 import { authGuard } from './Guards/authentication.guard';
 import { EditarProductosComponentComponent } from './components/editar-productos-component/editar-productos-component.component';
 import { userLevelGuard } from './Guards/user-level.guard';
+import { AdministrarPedidosComponentComponent } from './components/administrar-pedidos-component/administrar-pedidos-component.component';
+import { AgregarProductoComponentComponent } from './components/agregar-producto-component/agregar-producto-component.component';
 
 
 const routes:Routes=[
@@ -38,6 +40,9 @@ const routes:Routes=[
   {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent, canActivate: [authGuard]},
  
   {path: 'productoEdit/:idCliente/:idProducto', component:EditarProductosComponentComponent, /*canActivate[userLevelGuard]*/},
+  {path: 'administrarPedidos/:idCliente', component:AdministrarPedidosComponentComponent, /*canActivate[userLevelGuard]*/},
+  {path: 'agregarProducto', component:AgregarProductoComponentComponent, /*canActivate[userLevelGuard]*/},
+  
   {path:'**', component: HomeComponentComponent},
  
 

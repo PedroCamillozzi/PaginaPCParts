@@ -1,7 +1,7 @@
-<h1>Editar Producto {{producto.nombreProducto}}</h1>
-<div class="container d-flex flex-row">
-    <form (ngSubmit)="guardarCambios()">
-        <div>
+<h1 class="title">Editar Producto {{producto.nombreProducto}}</h1>
+<div class= "d-flex flex-row">
+    <form class="contenedor" (ngSubmit)="guardarCambios()">
+        <div class="imagenes">
             <div class="form-group">
                 <label>Imágenes del Producto</label>
                 <div class="img col-md-8">
@@ -12,9 +12,42 @@
                 <button class="btn btn-primary">Subir Imágen/es</button>
             </div>
         </div>
-        <div>
+        <div class="formularioProducto">
             <div class="form-group">
-                <p>Formulario</p>
+                <form [formGroup]="formularioProducto">
+                    <div class="mb-3">
+                      <div class="size">
+                        <div (keypress)="nombreProductoValidate()" class="size-inputs">
+                          <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+                          <input formControlName="nombreProducto" class="form-control">
+                          <label *ngIf="nombreProdutoError" class="lblError" >*El nombre del producto no debe superar los 100 caracteres</label>
+                        </div>
+                        <div (keypress)="descripcionValidate()" class="size-inputs">
+                          <label for="descripcion" class="form-label">Descripción</label>
+                          <input formControlName="descripcion" class="form-control">
+                          <label *ngIf="descripcionError" class="lblError">*La descripción no debe superar los 100 caracteres</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div (keypress)="detallesGeneralesValidate()" class="size-inputs">
+                      <label for="detallesGenerales" class="form-label">Detalles Generales</label>
+                      <input formControlName="detallesGenerales" class="form-control">
+                      <label *ngIf="detallesGeneralesError" class="lblError">*Los detalles generales no debe superar los 255 caracteres</label>
+                    </div>
+                    <div (keypress)="stockValidate()" class="size-inputs">
+                      <label for="stock" class="form-label">Stock Inicial</label>
+                      <input formControlName="stock" class="form-control">
+                      <label *ngIf="stockError" class="lblError">*El Stock no debe contener letras</label>
+                    </div>
+                    <div (keypress)="precioValidate()" class="size-inputs">
+                        <label for="precio" class="form-label">Precio</label>
+                        <input formControlName="precio" class="form-control">
+                        <label *ngIf="precioError" class="lblError">*El precio no debe contener letras ni ser negativo</label>
+                      </div>
+                  </form>
+                  <div class="submit">
+                    <button type="button" class="btn btn-primary" >Registrarse</button>
+                  </div>
             </div>
         </div>
     </form>

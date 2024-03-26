@@ -166,8 +166,8 @@ getPrecioProductosCliente(){
     this.router.navigate(['producto/'+idProducto])
   }
 
-  registrarPedido(){
-    if(!this.productosCliente){
+  registrarPedido(){    
+    if(this.productosCliente.length === 0){
       this._toastr.error("Debe cargar productos al carrito", "Error")
       return
     }

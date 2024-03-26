@@ -29,3 +29,8 @@
 .selected{
   cursor: pointer;
 }
+
+.example-container{
+  width: 99%;
+  max-width: 100%;
+}

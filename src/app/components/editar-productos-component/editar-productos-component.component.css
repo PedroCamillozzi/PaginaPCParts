@@ -1,3 +1,25 @@
+.title{
+    display: flex;
+    justify-content: center;
+}
+
 .delete-img{
     transform: translate(190px, 20px)
+}
+
+.contenedor{
+    display: flex;
+    flex-direction: row;
+    padding-top: 3rem;
+
+}
+
+.imagenes{
+    margin-left: 8rem;
+    width: 31rem;
+}
+
+.formularioProducto{
+    margin-left: 10rem;
+    width: 32rem;
 }
