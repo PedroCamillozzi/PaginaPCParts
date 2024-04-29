@@ -39,9 +39,9 @@ const routes:Routes=[
   {path: 'finalizarPedido', component:GraciasPorSucompraComponent, canActivate: [authGuard]},
   {path: 'misPedidos/:idCliente', component:MisPedidosComponentComponent, canActivate: [authGuard]},
  
-  {path: 'productoEdit/:idCliente/:idProducto', component:EditarProductosComponentComponent, /*canActivate[userLevelGuard]*/},
-  {path: 'administrarPedidos/:idCliente', component:AdministrarPedidosComponentComponent, /*canActivate[userLevelGuard]*/},
-  {path: 'agregarProducto', component:AgregarProductoComponentComponent, /*canActivate[userLevelGuard]*/},
+  {path: 'productoEdit/:idCliente/:idProducto', component:EditarProductosComponentComponent, canActivate: [userLevelGuard]},
+  {path: 'administrarPedidos/:idCliente', component:AdministrarPedidosComponentComponent, canActivate: [userLevelGuard]},
+  {path: 'agregarProducto', component:AgregarProductoComponentComponent, canActivate: [userLevelGuard]},
   
   {path:'**', component: HomeComponentComponent},
  

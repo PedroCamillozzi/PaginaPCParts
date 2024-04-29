@@ -38,7 +38,9 @@ constructor(private http:HttpClient) {
  }
 
  tipoUsuario(){
+
   const nivel:string = localStorage.getItem('Tipo de Usuario') || "";
+
   if(nivel === 'ADMIN'){
     return 1;
   }

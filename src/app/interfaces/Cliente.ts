@@ -6,5 +6,6 @@ export interface Cliente {
     email: string,
     telefono?: string,
     contraseña: string,
-    tipoUsuario?:number
+    idTipoUsuario?:number
+    nombreTipoUsuario?:string
 }
