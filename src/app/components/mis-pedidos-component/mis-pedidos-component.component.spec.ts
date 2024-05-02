@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {RouterTestingModule} from '@angular/router/testing'
 import { MisPedidosComponentComponent } from './mis-pedidos-component.component';
 import { PedidoService } from '../../services/pedido.service';
 import { Router } from '@angular/router';
@@ -17,28 +17,24 @@ class PedidoServiceMock{
   }
 }
 
-class RouterMock{
-  navigate = jest.fn();
-
-  navigateByUrl = jest.fn().mockResolvedValue(true);
-}
 describe('MisPedidosComponentComponent', () => {
   let component: MisPedidosComponentComponent;
   let fixture: ComponentFixture<MisPedidosComponentComponent>;
-  let routerMock:Router;
+  let router:Router;
   let pedidoService:PedidoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports:[RouterTestingModule],
       declarations: [MisPedidosComponentComponent],
-      providers: [{provide: PedidoService, useClass: PedidoServiceMock},
-        {provide: Router, useClass: RouterMock}
+      providers: [{provide: PedidoService, useClass: PedidoServiceMock}
         ]
-    });
+    }).compileComponents();
+
     fixture = TestBed.createComponent(MisPedidosComponentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    routerMock = TestBed.inject(Router);
+    router = TestBed.inject(Router);
     pedidoService = TestBed.inject(PedidoService);
   });
 
@@ -58,4 +54,22 @@ describe('MisPedidosComponentComponent', () => {
     expect(spyProductosFiltrados).toHaveBeenCalled();
     expect(component.pedidosRealizadosCliente).toEqual(mockPedidosRealizados);
   });
+
+  it('should return only date', ()=>{
+    const fechaPedido = new Date('2024-04-29T12:00:00')
+    const fechaEsperada = '29/4/2024'
+
+    const result = component.returnOnlyDate(fechaPedido)
+
+    expect(result).toEqual(fechaEsperada)
+  })
+
+  it('should redirect to producto', ()=>{
+    const idProducto = 1
+
+    const spyRouter = jest.spyOn(router, 'navigate')
+
+    component.redirectToProducto(idProducto)
+    expect(spyRouter).toHaveBeenCalledWith(['producto/'+idProducto])
+  })
 });

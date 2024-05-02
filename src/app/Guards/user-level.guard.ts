@@ -15,6 +15,7 @@ export const userLevelGuard: CanActivateFn = () => {
     descTipoUsuario = data.nombreTipoUsuario || '';
   })
 
+  
   if(descTipoUsuario !== nivel || descTipoUsuario !== "ADMIN"){
     routerService.navigate(['/home']);
     localStorage.setItem('Tipo de Usuario', 'No vas a entrar')

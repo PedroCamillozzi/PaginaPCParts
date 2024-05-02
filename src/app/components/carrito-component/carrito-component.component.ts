@@ -86,7 +86,7 @@ getPrecioProductosCliente(){
         cantidad: 1
       }
       this._carritoService.patchProductoCarritoCliente(carritoCliente).subscribe({
-        next: (data)=>{
+        next: ()=>{
          this.router.navigate(['carrito/'+ idCliente])
         },
         error: (err:HttpErrorResponse) => {

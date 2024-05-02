@@ -9,17 +9,20 @@ import { PrecioProductoService } from '../../services/precioProducto.service';
 import { ToastrService } from 'ngx-toastr';
 import { PedidoService } from '../../services/pedido.service';
 import { DetallePedidoService } from '../../services/detallePedido.service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { Carrito } from 'src/app/interfaces/Carrito';
+import { Producto } from 'src/app/interfaces/Producto';
+import { ProductoPrecio } from 'src/app/interfaces/ProductoPrecio';
+import { PrecioProducto } from 'src/app/interfaces/PrecioProductos';
+import { RouterTestingModule } from '@angular/router/testing';
 
 class CarritoServiceMock{
-  getProductosCarritoCliente(idCliente:string):Observable<any>{
-    if(idCliente === '1'){
-      return of({idProducto: 1, idCliente:1, cantidad:20});
-    }
-    return of();
+  getProductosCarritoCliente():Observable<Carrito[]>{
+    return of([{idProducto: 1, idCliente:1, cantidad:20}])
   }
-  patchProductoCarritoCliente(){
-    return;
+  patchProductoCarritoCliente(clienteProducto:any):Observable<any>{
+    return of();
   }
   patchModificarCantidadCarritoCliente(){
     return;
@@ -39,22 +42,35 @@ class ActivatedRouteMock {
 }
 
 class ErrorServiceMock{
-
+  msjError(event:HttpErrorResponse){
+    return 
+  }
 }
 
 class ProductoServiceMock{
-
+  getProducto(idProducto:string):Observable<Producto>{
+    return of({idProducto:1,nombreProducto:'Intel i7', descripcion:"buenaso", detallesGenerales:"alta gama", stock:10})
+  } 
+  getProductos(){
+    return
+  }
+  
+  putProducto(producto:ProductoPrecio){
+    return
+  }
+  
+  postProducto(producto:ProductoPrecio){
+    return 
+  }
 }
 
 class PrecioProductoServiceMock{
-
+  getPrecioProducto(idProducto:number):Observable<PrecioProducto>{
+    return of({idProducto: 1, fechaDesde: new Date('2023-12-21'), precio: 1200})
+  }
 }
 
 class ToastrServiceMock{
-
-}
-
-class RouterMock{
 
 }
 
@@ -71,18 +87,22 @@ class DetallePedidoServiceMock{
 describe('CarritoComponentComponent', () => {
   let component: CarritoComponentComponent;
   let fixture: ComponentFixture<CarritoComponentComponent>;
-  let carritoServiceMock :CarritoService;
+  let carritoServiceMock: CarritoService;
+  let productoServiceMock: ProductoServiceMock;
+  let precioProductoMock: PrecioProductoServiceMock;
+  let router:Router;
+  let errorServiceMock: ErrorServiceMock;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [CarritoComponentComponent],
+      imports:[HttpClientModule, RouterTestingModule],
       providers:[{ provide: CarritoService, useClass: CarritoServiceMock},
                  { provide:ActivatedRoute, useClass:ActivatedRouteMock},
                  { provide: ErrorService, useClass:ErrorServiceMock},
                  { provide: ProductoService, useClass: ProductoServiceMock},
                  { provide: PrecioProductoService, useClass: PrecioProductoServiceMock},
                  { provide: ToastrService, useClass: ToastrServiceMock},
-                 { provide: Router, useClass: RouterMock},
                  { provide: PedidoService, useClass:PedidoServiceMock},
                  { provide: DetallePedidoService, useClass: DetallePedidoServiceMock}
                  ]
@@ -92,25 +112,126 @@ describe('CarritoComponentComponent', () => {
     fixture.detectChanges();
 
     carritoServiceMock = TestBed.inject(CarritoService);
+    productoServiceMock = TestBed.inject(ProductoService)
+    precioProductoMock = TestBed.inject(PrecioProductoService)
+    router = TestBed.inject(Router)
+    errorServiceMock = TestBed.inject(ErrorService)
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  /*it('should getCarritoCliente', () => {
-    const idCliente = '1';
+  it('should getCarritoCliente if exist idCliente', () => {
+    localStorage.setItem('idCliente', '1');
+
+    const mockCarrito = [{idProducto: 1, idCliente:1, cantidad:20}]
 
     const spyGetProductosCarritoCliente = jest.spyOn(carritoServiceMock, 'getProductosCarritoCliente')
 
+    spyGetProductosCarritoCliente.mockReturnValue(of(mockCarrito))
+
     component.getCarritoCliente();
 
-    expect(spyGetProductosCarritoCliente).toHaveBeenCalledWith(idCliente);
+    expect(spyGetProductosCarritoCliente).toHaveBeenCalled()
+    
+    expect(component.carritoCliente).toEqual(mockCarrito);
 
-    expect(component.carritoCliente).toEqual([{idProducto: 1, idCliente:1, cantidad:20}]);
+    localStorage.removeItem('idCliente');
 
     
-  });*/
+  });
+
+  it("should'nt getCarritoCliente if not exist idCliente", () => {
+    localStorage.setItem('idCliente', '');
+
+    const spyGetProductosCarritoCliente = jest.spyOn(carritoServiceMock, 'getProductosCarritoCliente')
+
+    spyGetProductosCarritoCliente.mockReturnValue(of())
+
+    component.getCarritoCliente();
+
+    expect(spyGetProductosCarritoCliente).not.toHaveBeenCalled()
+
+    localStorage.removeItem('idCliente');
+  });
+
+  it('should get producto cliente',()=>{
+    const mockProducto = {idProducto:1,nombreProducto:'Intel i7', descripcion:"buenaso", detallesGenerales:"alta gama", stock:10}
+    component.carritoCliente = [{idProducto: 1, idCliente:1, cantidad:20}]
+
+    const spyGetProducto = jest.spyOn(productoServiceMock, 'getProducto')
+
+    spyGetProducto.mockReturnValue(of(mockProducto))
+
+    component.getProductoCliente();
+
+    expect(spyGetProducto).toHaveBeenCalled()
+    
+    expect(component.productosCliente).toEqual([mockProducto]);
+
+  })
+
+  it('should get precio producto cliente', ()=>{
+    const mockPrecioProducto = {idProducto: 1, fechaDesde: new Date('2023-12-21'), precio: 1200}
+    component.carritoCliente = [{idProducto: 1, idCliente:1, cantidad:20}]
+
+    const spyGetPrecioProducto = jest.spyOn(precioProductoMock, 'getPrecioProducto')
+
+    spyGetPrecioProducto.mockReturnValue(of(mockPrecioProducto));
+
+    component.getPrecioProductosCliente();
+
+    expect(spyGetPrecioProducto).toHaveBeenCalled()
+    
+    expect(component.precioProductosCliente).toEqual([mockPrecioProducto]);
+
+  })
+
+  it('should agregar producto al carrito', ()=>{
+    localStorage.setItem('idCliente', '1');
+    const idCliente = localStorage.getItem('idCliente');
+    component.idProducto = '1'
+
+    const spyPatchProductoCarritoCliente = jest.spyOn(carritoServiceMock, 'patchProductoCarritoCliente')
+    spyPatchProductoCarritoCliente.mockReturnValue(of('Ok'))
+
+    const spyRouterNavigate = jest.spyOn(router, 'navigate')
+
+    component.agregarProductoAlCarrito()
+
+    expect(spyPatchProductoCarritoCliente).toHaveBeenCalled();
+
+    expect(spyRouterNavigate).toHaveBeenCalledWith(['carrito/'+idCliente]);
+
+
+    localStorage.removeItem('idCliente');
+  })
+
+  it("shouldn't agregar producto al carrito", ()=>{
+    localStorage.setItem('idCliente', '1');
+    component.idProducto = '1'
+
+    const spyPatchProductoCarritoCliente = jest.spyOn(carritoServiceMock, 'patchProductoCarritoCliente').mockReturnValue(new Observable((subscriber) => {
+      subscriber.error(new HttpErrorResponse({ status: 500 }));
+  }));
+    const msjErrorSpy = jest.spyOn(errorServiceMock, 'msjError');
+
+    component.agregarProductoAlCarrito()
+
+    expect(spyPatchProductoCarritoCliente).toHaveBeenCalled();
+    expect(msjErrorSpy).toHaveBeenCalledWith(expect.any(HttpErrorResponse));
+
+    localStorage.removeItem('idCliente');
+  })
+
+  it('should recuperar Id Producto', ()=>{
+    
+  })
+
+  it('should verificar Id Producto', () =>{
+
+  })
 
   it('should calculate the total', () => {
     const productoCarrito = {idProducto: 1, idCliente: 2, cantidad: 3};
@@ -123,8 +244,4 @@ describe('CarritoComponentComponent', () => {
 
 
   });
-
-  /*it('should increase quantity ', () => {
-
-  });*/
 });
