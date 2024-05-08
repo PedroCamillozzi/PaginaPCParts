@@ -1,12 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
 import { authGuard } from '../Guards/authentication.guard';
 import { LogueoService } from '../services/logueo.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
-class RouterMock{
-  navigate = jest.fn();
-}
 
 class LogueoServiceMock{
   tokenExpirado(token:string){
@@ -18,16 +16,16 @@ class LogueoServiceMock{
 }
 
 describe('Authentication', () => {
-  let routerMock:Router;
+  let routerService:Router;
   let logueoServiceMock: LogueoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{provide:Router, useClass:RouterMock},
-                  {provide:LogueoService, useClass:LogueoServiceMock}],
+      imports:[RouterTestingModule],
+      providers: [{provide:LogueoService, useClass:LogueoServiceMock}],
     });
     
-    routerMock = TestBed.inject(Router);
+    routerService = TestBed.inject(Router);
     logueoServiceMock = TestBed.inject(LogueoService);
   });
 
@@ -35,32 +33,47 @@ describe('Authentication', () => {
     expect(authGuard).toBeDefined();
   });
 
-  it('should canActivate return == true', ()=>{
+  it('should canActivate return == true', async ()=>{
+    const route: ActivatedRouteSnapshot = {} as any;
+    const state: RouterStateSnapshot = {} as any;
 
     localStorage.setItem('token', 'daTrue');
     
     const token = localStorage.getItem('token') || '';
 
+    const spyRouterService = jest.spyOn(routerService, 'navigate');
+
     const result = logueoServiceMock.tokenExpirado(token)
 
-    expect(result).toBe(true);
-
-    const spyRouterService = jest.spyOn(routerMock, 'navigate');
-
+    const guadResult = await TestBed.runInInjectionContext(() => authGuard(route, state));
+    
     expect(spyRouterService).toHaveBeenCalledWith(['/home']);
+    expect(result).toBe(true);
+    expect(guadResult).toBe(false)
+
+
+   
 
 
   });
 
-  it('should canActivate return == false', ()=>{
+  it('should canActivate return == false', async ()=>{
+    const route: ActivatedRouteSnapshot = {} as any;
+    const state: RouterStateSnapshot = {} as any;
 
     localStorage.setItem('token', '');
     
     const token = localStorage.getItem('token') || '';
 
+    const spyRouterService = jest.spyOn(routerService, 'navigate');
+
     const result = logueoServiceMock.tokenExpirado(token)
 
+    const guadResult = await TestBed.runInInjectionContext(() => authGuard(route, state));
+
+    expect(spyRouterService).not.toHaveBeenCalledWith(['/home'])
     expect(result).toBe(false);
+    expect(guadResult).toBe(true)
 
   });
  

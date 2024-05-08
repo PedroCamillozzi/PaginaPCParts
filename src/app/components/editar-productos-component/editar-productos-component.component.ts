@@ -119,7 +119,7 @@ export class EditarProductosComponentComponent  implements OnInit {
 
   detallesGeneralesValidate(){
     const detallesGeneralesValue = this.formularioProducto.get('detallesGenerales')?.value;
-    if (detallesGeneralesValue && detallesGeneralesValue.length < 255) {
+    if (detallesGeneralesValue && detallesGeneralesValue.length > 255) {
       this.detallesGeneralesError = true;
       return false;
     }
@@ -162,6 +162,7 @@ export class EditarProductosComponentComponent  implements OnInit {
       next:() => {
 
         this.toastr.success('Usted ha modificado con éxito el producto', 'Éxito ' + this.formularioProducto.get('nombreProducto')!.value)
+        window.location.reload();
       },
       error:(event:HttpErrorResponse)=>{
         this._errorService.msjError(event);

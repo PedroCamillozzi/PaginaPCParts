@@ -40,22 +40,22 @@
     </mat-card>
     
     <div class="contenedorCartas">
-    <div *ngFor="let producto of listaProductos; let i = index " >
-      <div  class="card">
-        <img (click)="redirectToProducto(producto.idProducto)" src="../../../assets/images/Procesador_Intel_Celeron_G4900.jpg" class="card-img-top selected" alt="Imagen del Producto">
-        <div class="card-body">
-          <h5 (click)="redirectToProducto(producto.idProducto)"  class="card-title selected">{{producto?.nombreProducto}}</h5>
-          <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto === producto?.idProducto">{{listaPrecioProductos[i].precio}}</p>
-          <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto !== producto?.idProducto">No existe precio para el producto</p>
+      <div *ngFor="let producto of listaProductos; let i = index " >
+        <div  class="card">
+          <img (click)="redirectToProducto(producto.idProducto)" src="../../../assets/images/Procesador_Intel_Celeron_G4900.jpg" class="card-img-top selected" alt="Imagen del Producto">
+          <div class="card-body">
+             <h5 (click)="redirectToProducto(producto.idProducto)"  class="card-title selected">{{producto?.nombreProducto}}</h5>
+             <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto === producto?.idProducto">{{listaPrecioProductos[i].precio}}</p>
+             <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto !== producto?.idProducto">No existe precio para el producto</p>
           <div style="display: flex; flex-direction: row;">
             <button (click)="redirecToCarrito(producto.idProducto)" class="btn btn-primary">Agregar al Carrito</button>
             <button *ngIf="esAdmin()" style="padding-left: 3rem;" (click)="redirecToEditarProducto(producto.idProducto)" class="btn btn-link">Editar</button>
           </div>
 
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
 
   </mat-drawer-content>

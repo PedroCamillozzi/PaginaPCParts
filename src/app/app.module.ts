@@ -61,7 +61,8 @@ const routes:Routes=[
     MisDatosPersonalesComponentComponent,
     MisPedidosComponentComponent,
     GraciasPorSucompraComponent,
-    EditarProductosComponentComponent
+    EditarProductosComponentComponent,
+    AgregarProductoComponentComponent
   ],
   imports: [
     BrowserModule,

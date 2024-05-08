@@ -111,6 +111,7 @@ describe('CarritoComponentComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
+
     carritoServiceMock = TestBed.inject(CarritoService);
     productoServiceMock = TestBed.inject(ProductoService)
     precioProductoMock = TestBed.inject(PrecioProductoService)
@@ -226,11 +227,37 @@ describe('CarritoComponentComponent', () => {
   })
 
   it('should recuperar Id Producto', ()=>{
-    
+    component.recuperaIdProducto()
+
+    expect(component.idProducto).toBe('1')
   })
 
-  it('should verificar Id Producto', () =>{
+  it('should verificar Id Producto and call agregarProductoAlCarrito', () =>{
+    component.idProducto = ''
+    expect(component.idProducto).toBe('')
 
+    const resultAddProduct = jest.spyOn(component, 'agregarProductoAlCarrito')
+    const resultCheckId = jest.spyOn(component, 'verificarIdProducto')
+
+    component.verificarIdProducto()
+
+    expect(component.idProducto).toBe('1')
+    expect(resultCheckId).toHaveBeenCalled()
+    expect(resultAddProduct).toHaveBeenCalled()
+  })
+
+  it("should'nt verificar Id Producto and not call agregarProductoAlCarrito", () =>{
+    component.idProducto = ''
+    expect(component.idProducto).toBe('')
+
+    const resultAddProduct = jest.spyOn(component, 'agregarProductoAlCarrito')
+    const resultCheckId = jest.spyOn(component, 'verificarIdProducto')
+
+    component.verificarIdProducto()
+
+    expect(component.idProducto).toBe('')
+    expect(resultCheckId).toHaveBeenCalled()
+    expect(resultAddProduct).not.toHaveBeenCalled()
   })
 
   it('should calculate the total', () => {
@@ -244,4 +271,11 @@ describe('CarritoComponentComponent', () => {
 
 
   });
+
+  it('should aumentarCantidad', () =>{
+    const pc:Producto = {idProducto:1,nombreProducto:'Intel i7', descripcion:"buenaso", detallesGenerales:"alta gama", stock:1}
+
+    const c: Producto = {idProducto:1,nombreProducto:'Intel i7', descripcion:"buenaso", detallesGenerales:"alta gama", stock:10}
+
+  })
 });
