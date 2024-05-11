@@ -130,9 +130,10 @@ getPrecioProductosCliente(){
           this._precioProductoService.getPrecioProducto(pc.idProducto).subscribe(dataPrecioProducto =>{
             const precio:number = dataPrecioProducto.precio
             this.total += Number(precio);
+            window.location.reload();
           })
         })
-     
+        
       }
 
     
@@ -148,6 +149,7 @@ getPrecioProductosCliente(){
           this._precioProductoService.getPrecioProducto(pc.idProducto).subscribe(dataPrecioProducto =>{
             const precio:number = dataPrecioProducto.precio
             this.total -= Number(precio);
+            window.location.reload();
           })
         })
         

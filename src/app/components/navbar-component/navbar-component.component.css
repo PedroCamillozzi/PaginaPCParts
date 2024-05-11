@@ -36,3 +36,8 @@
 .container1{
     padding-right: 3rem;
 }
+
+.imgLogo{
+    max-width: 50px;
+    max-height: 50px
+}
