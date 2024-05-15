@@ -15,15 +15,15 @@ private myApiUrl:string;
 
 constructor(private http:HttpClient) {
   this.myAppUrl = environment.endpoint;
-  this.myApiUrl = 'productos/'
+  this.myApiUrl = 'productos'
  }
 
 getProductos():Observable<Producto[]>{
-  return this.http.get<Producto[]>(this.myAppUrl+this.myApiUrl + 'all')
+  return this.http.get<Producto[]>(this.myAppUrl+this.myApiUrl + '/all')
 }
 
 getProducto(idProducto:String):Observable<Producto>{
-  return this.http.get<Producto>(this.myAppUrl + this.myApiUrl + idProducto)
+  return this.http.get<Producto>(this.myAppUrl + this.myApiUrl + '/' + idProducto)
 }
 
 putProducto(producto:ProductoPrecio):Observable<ProductoPrecio>{
@@ -32,6 +32,10 @@ putProducto(producto:ProductoPrecio):Observable<ProductoPrecio>{
 
 postProducto(producto:PrecioProducto):Observable<ProductoPrecio>{
   return this.http.post<ProductoPrecio>(this.myAppUrl+this.myApiUrl+'/', producto)
+}
+
+deleteProducto(idProducto:String):Observable<String>{
+return this.http.delete<String>(this.myAppUrl + this.myApiUrl + '/' + idProducto)
 }
 
 }

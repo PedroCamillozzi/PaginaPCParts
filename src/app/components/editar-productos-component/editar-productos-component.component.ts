@@ -99,7 +99,7 @@ export class EditarProductosComponentComponent  implements OnInit {
 
   nombreProductoValidate(){
     const nombreProductoValue = this.formularioProducto.get('nombreProducto')?.value;
-    if (nombreProductoValue && nombreProductoValue.length < 100) {
+    if (nombreProductoValue && nombreProductoValue.length > 100) {
       this.nombreProdutoError = true;
       return false;
     }
@@ -109,7 +109,7 @@ export class EditarProductosComponentComponent  implements OnInit {
 
   descripcionValidate(){
     const descripcionValue = this.formularioProducto.get('descripcion')?.value;
-    if (descripcionValue && descripcionValue.length < 100) {
+    if (descripcionValue && descripcionValue.length  > 100) {
       this.descripcionError = true;
       return false;
     }
@@ -168,6 +168,18 @@ export class EditarProductosComponentComponent  implements OnInit {
         this._errorService.msjError(event);
       }
     });
+  }
+
+  eliminarProducto(){
+    this._productoService.deleteProducto(this.idProducto).subscribe({
+      next:(v) =>{
+        this.toastr.success('Producto Removido');
+        this.router.navigate(['/productos']);
+      },
+      error: (event:HttpErrorResponse)=>{
+        this._errorService.msjError(event)
+      }
+    })
   }
 
 

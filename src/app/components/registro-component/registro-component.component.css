@@ -16,3 +16,9 @@
     color: red;
     transform: translate(5px, -4px);
 }
+
+.lblCampos{
+    font-size: x-small;
+    color: rgb(105, 105, 105);
+    transform: translate(5px, -4px);
+}

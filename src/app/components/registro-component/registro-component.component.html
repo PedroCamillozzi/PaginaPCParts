@@ -21,21 +21,25 @@
         <div (keypress)="dniValidate()" class="mb-3">
           <label for="dni" class="form-label">DNI</label>
           <input formControlName="dni" class="form-control">
+          <label *ngIf="!dniError" class="lblCampos">*El DNI debe contener 8 números</label>
           <label *ngIf="dniError" class="lblError">*El DNI no debe contener letras y no debe superar los 8 números</label>
         </div>
         <div (keypress)="phoneValidate()" class="mb-3">
           <label for="phone" class="form-label">Teléfono</label>
           <input formControlName="phone" class="form-control" aria-describedby="emailHelp">
+          <label *ngIf="!phoneError" class="lblCampos">*El Teléfono debe contener 10 números</label>
           <label *ngIf="phoneError" class="lblError">*El Teléfono no debe contener letras y no debe superar los 10 números</label>
         </div>
         <div (focusout)="emailValidate()" class="mb-3">
           <label for="email" class="form-label">Dirección de Correo</label>
           <input formControlName="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp">
+          <label *ngIf="!emailError" class="lblCampos">*El email debe contener: @hotmail.com, @gmail.com, etc</label>
           <label *ngIf="emailError" class="lblError">*El email debe ser válido</label>
         </div>
         <div (focusout)="passwordValidate()" class="mb-3">
           <label for="password" class="form-label">Contraseña</label>
           <input formControlName="password" type="password" class="form-control" id="exampleInputPassword">
+          <label *ngIf="!passwordError" class="lblCampos">*La contraseña debe ser mayor a 6 caracteres</label>
           <label *ngIf="passwordError" class="lblError">*La contraseña debe ser mayor a 6 caracteres</label>
         </div>
         <div (focusout)="repeatPasswordValidate()" class="mb-3">

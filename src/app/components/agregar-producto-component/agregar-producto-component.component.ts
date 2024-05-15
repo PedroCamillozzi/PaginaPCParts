@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ProductoPrecio } from 'src/app/interfaces/ProductoPrecio';
 import { ErrorService } from 'src/app/services/error.service';
@@ -23,7 +24,8 @@ export class AgregarProductoComponentComponent implements OnInit {
   constructor(private formBuilder:FormBuilder,
               private _productoService: ProductoService,
               private toastr: ToastrService,
-              private _errorService: ErrorService
+              private _errorService: ErrorService,
+              private router:Router
   ) 
   {
     this.formularioProducto = this.formBuilder.group({
@@ -61,7 +63,7 @@ export class AgregarProductoComponentComponent implements OnInit {
 
   nombreProductoValidate(){
     const nombreProductoValue = this.formularioProducto.get('nombreProducto')?.value;
-    if (nombreProductoValue && nombreProductoValue.length < 100) {
+    if (nombreProductoValue && nombreProductoValue.length > 100) {
       this.nombreProdutoError = true;
       return false;
     }
@@ -71,7 +73,7 @@ export class AgregarProductoComponentComponent implements OnInit {
 
   descripcionValidate(){
     const descripcionValue = this.formularioProducto.get('descripcion')?.value;
-    if (descripcionValue && descripcionValue.length < 100) {
+    if (descripcionValue && descripcionValue.length > 100) {
       this.descripcionError = true;
       return false;
     }
@@ -122,7 +124,7 @@ export class AgregarProductoComponentComponent implements OnInit {
       next:() => {
 
         this.toastr.success('Usted ha modificado con éxito el producto', 'Éxito ' + this.formularioProducto.get('nombreProducto')!.value)
-        window.location.reload();
+        this.router.navigate(['/productos'])
       },
       error:(event:HttpErrorResponse)=>{
         this._errorService.msjError(event);
