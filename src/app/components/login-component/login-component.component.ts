@@ -5,6 +5,7 @@ import { Cliente } from '../../interfaces/Cliente';
 import { ClienteService } from '../../services/cliente.service';
 import { ErrorService } from '../../services/error.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { JwtService } from 'src/app/services/jwt.service';
 
 @Component({
   selector: 'app-login-component',
@@ -23,7 +24,9 @@ export class LoginComponentComponent implements OnInit{
               private _clienteService:ClienteService,
               private router:Router,
               private _errorService:ErrorService,
-              private formBuilder:FormBuilder){
+              private formBuilder:FormBuilder,
+              private _jwtService:JwtService
+            ){
                 this.loginForm = this.formBuilder.group({
                   email: ['', [Validators.required, Validators.email]],
                   password: ['', [Validators.required]]
@@ -53,6 +56,7 @@ export class LoginComponentComponent implements OnInit{
         localStorage.setItem('Tipo de Usuario', data.tipoUsuarioNombre);
         this.router.navigate(['home']);
         this.loading = true;
+        console.log(this._jwtService.getClientId(data.token));
         this.cerrarModal();
       },
       error: (err:HttpErrorResponse) => {
