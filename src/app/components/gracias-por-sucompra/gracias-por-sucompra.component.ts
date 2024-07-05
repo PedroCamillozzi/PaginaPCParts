@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtService } from 'src/app/services/jwt.service';
 
 @Component({
   selector: 'app-gracias-por-sucompra',
@@ -9,13 +10,16 @@ import { Router } from '@angular/router';
 export class GraciasPorSucompraComponent {
 
   
-  constructor(private router:Router){
+  constructor(private router:Router,
+              private _jwtService:JwtService
+  ){
     this.redirectToMisPedidos();
   }
 
   redirectToMisPedidos(){
     setTimeout(() => {
-      const idCliente = localStorage.getItem('idCliente');
+      const token = localStorage.getItem('token') || '';
+      const idCliente: string = this._jwtService.getClientId(token) || '';
       this.router.navigate(['misPedidos/'+ idCliente])
     }, 1700);
   }

@@ -3,7 +3,7 @@ export interface IProductosCompletos {
     fechaPedido:Date;
     fechaEntrega:Date;
     estado:string;
-    dp:{
+    dp:[{
         idPedido:number;
         idProducto:number;
         cantidad:number;
@@ -22,5 +22,5 @@ export interface IProductosCompletos {
                 precio:number;
             }]
         }
-    }
+    }]
 }

@@ -1,15 +1,14 @@
 <h1 class="title">Editar Producto {{producto.nombreProducto}}</h1>
 <div class= "d-flex flex-row">
-    <form class="contenedor" (ngSubmit)="guardarCambios()">
+    <form class="contenedor">
         <div class="imagenes">
             <div class="form-group">
                 <label>Imágenes del Producto</label>
-                <div class="img col-md-8">
+                <div *ngFor="let image of images;" class="img col-md-8">
                     <button class="btn btn-danger delete-img">X</button>
-                    <img class="img-fluid" [src]="imagenesURL" alt="">
+                    <img class="img-fluid" src="{{image}}" alt="">
                 </div>
-                <input class="form-control-file" type="file" name="image" accept="image/*" (change)="elegirImagen($event)"><br>
-                <button class="btn btn-primary">Subir Imágen/es</button>
+                <input class="form-control-file" type="file" name="images[]" accept="image/*" (change)="changeImages($event)" multiple><br>
             </div>
         </div>
         <div class="formularioProducto">

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PedidoService } from '../../services/pedido.service';
 import { IProductosCompletos } from 'src/app/interfaces/IProductosCompletos';
+import { JwtService } from 'src/app/services/jwt.service';
 
 @Component({
   selector: 'app-mis-pedidos-component',
@@ -13,6 +14,7 @@ export class MisPedidosComponentComponent implements OnInit {
 
   constructor( private _pedidoService: PedidoService,
                 private router:Router,
+                private _jwtService: JwtService
                 ){
                 
   }
@@ -28,7 +30,8 @@ export class MisPedidosComponentComponent implements OnInit {
   
 
   findAllPedidosCliente(){
-    const idCliente:string = localStorage.getItem('idCliente') || '';
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
       this._pedidoService.findAllPedidosCliente(idCliente).subscribe((data) =>{
         this.pedidosRealizadosCliente = data;
       });

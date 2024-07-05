@@ -19,8 +19,12 @@ decodeToken(token: string): any {
 
 getClientId(token: string): string | null {
   const decodedToken = this.decodeToken(token);
-  console.log(decodedToken);
   return decodedToken ? decodedToken.idCliente : null;
+}
+
+getTipoUsuario(token: string): string | null {
+  const decodedToken = this.decodeToken(token);
+  return decodedToken ? decodedToken.tipoUsuario : null;
 }
 
 }

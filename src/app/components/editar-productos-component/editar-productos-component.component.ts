@@ -7,6 +7,7 @@ import { PrecioProducto } from 'src/app/interfaces/PrecioProductos';
 import { Producto } from 'src/app/interfaces/Producto';
 import { ProductoPrecio } from 'src/app/interfaces/ProductoPrecio';
 import { ErrorService } from 'src/app/services/error.service';
+import { ImageService } from 'src/app/services/image.service';
 import { PrecioProductoService } from 'src/app/services/precioProducto.service';
 import { ProductoService } from 'src/app/services/producto.service';
 
@@ -19,10 +20,7 @@ export class EditarProductosComponentComponent  implements OnInit {
   idProducto:string='';
   producto:Producto={} as Producto;
   precioProducto:PrecioProducto | undefined;
-  //image='';
-  //imageURL='';
-  imagenesURL:string[]=[];
-  //imagenes:string[]=[];
+  images:any = []
   formularioProducto: FormGroup<any>;
   nombreProdutoError:boolean = false;
   descripcionError: boolean = false;
@@ -36,7 +34,8 @@ export class EditarProductosComponentComponent  implements OnInit {
               private router:Router,
               private toastr:ToastrService,
               private formBuilder:FormBuilder,
-              private _errorService:ErrorService){
+              private _errorService:ErrorService,
+              private _imageService:ImageService){
                 this.formularioProducto = this.formBuilder.group({
                   nombreProducto: ['', [Validators.required, Validators.maxLength(100)]],
                   descripcion: ['', [Validators.required, Validators.maxLength(100)]],
@@ -52,10 +51,8 @@ export class EditarProductosComponentComponent  implements OnInit {
       this.idProducto = data;
     })
     this.getProducto();
+    this.loadProductsImages();
 
-    //this.imageURL = "assets/images/no-image.png"
-    //const imageURL = "assets/images/no-image.png"
-    //this.imagenesURL.push(imageURL);
   }
 
   getProducto(){
@@ -76,26 +73,6 @@ export class EditarProductosComponentComponent  implements OnInit {
     })
   }
 
-  guardarCambios(){
-    
-  }
-
-  elegirImagen(event:any){
-    if(event.target.files.length > 0){
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event:any)=>{
-        //this.imagenesURL.push(event.target.result)
-       // this.imageURL = event.target.result
-      }
-      //this.imagenes.push(file);
-      //this.image = file;
-      
-    }
-    
-  
-  }
 
   nombreProductoValidate(){
     const nombreProductoValue = this.formularioProducto.get('nombreProducto')?.value;
@@ -180,6 +157,50 @@ export class EditarProductosComponentComponent  implements OnInit {
         this._errorService.msjError(event)
       }
     })
+  }
+
+  
+  loadProductsImages(){
+    this._imageService.getProductsImage(this.idProducto).subscribe({
+      next: (data) =>{
+        data.forEach( (d:any) => {
+          this.images.push('data:image/jpeg;base64,' + d.data)
+        });        
+      },
+      error: (error:HttpErrorResponse)=>{
+        console.log(error);
+      }
+    })
+  }
+
+  changeImages(event:any){
+    const files = event.target.files
+
+    if((this.images.length + files.length)  > 5){
+      return this.toastr.error('Solo se pueden subir 5 imágenes por producto', 'Error')
+    }
+
+    const arrayFiles = Array.from(files)
+    
+
+    this._imageService.postProductsImage(arrayFiles, this.idProducto).subscribe({
+      next: () =>{
+        arrayFiles.forEach((f:any) => {          
+          const reader = new FileReader()
+          reader.readAsDataURL(f)
+      
+          reader.onload = () => {
+            this.images.push(reader.result) 
+          };
+        });
+      },
+      error:(event:HttpErrorResponse) =>{
+        console.log(event);
+        
+      }
+    })
+    
+    return
   }
 
 

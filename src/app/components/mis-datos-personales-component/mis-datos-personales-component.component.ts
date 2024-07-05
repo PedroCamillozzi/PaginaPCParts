@@ -4,6 +4,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Cliente } from '../../interfaces/Cliente';
 import { ClienteService } from '../../services/cliente.service';
 import { ErrorService } from '../../services/error.service';
+import { JwtService } from 'src/app/services/jwt.service';
+import { ImageService } from 'src/app/services/image.service';
 
 
 
@@ -25,21 +27,26 @@ export class MisDatosPersonalesComponentComponent implements OnInit {
   newPassword:string='';
   repeatNewPassword:string='';
   recupera:boolean = false;
+  image:any = '../../../assets/images/usuarioPerfil.png'
 
   constructor( private _clienteService:ClienteService,
               private _toastr:ToastrService,
-              private _errorService:ErrorService){
+              private _errorService:ErrorService,
+              private _jwtService: JwtService,
+              private _imageService:ImageService){
 
   }
 
   ngOnInit(): void {
+    this.loadPerfilImage();
     this.getDatosCliente();
 
   }
 
 
   getDatosCliente(){
-    const idCliente = localStorage.getItem('idCliente') || '';
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
     if(idCliente != ''){
       this._clienteService.getDatosCliente(idCliente).subscribe(data =>{
         this.cliente = data
@@ -97,4 +104,42 @@ export class MisDatosPersonalesComponentComponent implements OnInit {
       }
     })
   }
+
+  changePerfilImage(event:any){
+    const file = event.target.files[0]
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
+
+
+    this._imageService.postPerfilImage(file, idCliente).subscribe({
+      next: () =>{
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+    
+        reader.onload = () => {
+          this.image = reader.result
+        };
+      },
+      error:(event:HttpErrorResponse) =>{
+        console.log(event);
+        
+      }
+    })
+    
+  }
+
+  loadPerfilImage(){
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
+    this._imageService.getPerfilImage(idCliente).subscribe({
+      next:(data:any) =>{
+        this.image = 'data:image/jpeg;base64,' + data[0].data
+      },
+      error: (error:HttpErrorResponse) =>{
+        console.log(error);
+      }
+    })
+  }
+
+
 }

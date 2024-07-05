@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environment/environment';
 import { Cliente } from '../interfaces/Cliente';
 import { Observable } from 'rxjs';
+import { JwtService } from './jwt.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,9 @@ export class ClienteService {
   private myAppUrl: string;
   private myApiUrl:string;
 
-constructor(private http:HttpClient) {
+constructor(private http:HttpClient,
+            private _jwtService: JwtService
+) {
   this.myAppUrl = environment.endpoint;
   this.myApiUrl = 'client/'
  }
@@ -38,8 +41,8 @@ constructor(private http:HttpClient) {
  }
 
  tipoUsuario(){
-
-  const nivel:string = localStorage.getItem('Tipo de Usuario') || "";
+  const token = localStorage.getItem('token') || "";
+  const nivel:string = this._jwtService.getTipoUsuario(token) || '';
 
   if(nivel === 'ADMIN'){
     return 1;

@@ -28,7 +28,7 @@
         <div class="dropdown">
           <span>Ordenar Por: </span>
           <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Filtrado
+            {{filtrado}}
           </button>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" (click)="ordenarPorTodos()">Todos</a></li>
@@ -40,13 +40,12 @@
     </mat-card>
     
     <div class="contenedorCartas">
-      <div *ngFor="let producto of listaProductos; let i = index " >
+      <div *ngFor="let producto of listaProductosPrecio; let i = index " >
         <div  class="card">
-          <img (click)="redirectToProducto(producto.idProducto)" src="../../../assets/images/Procesador_Intel_Celeron_G4900.jpg" class="card-img-top selected" alt="Imagen del Producto">
+          <img (click)="redirectToProducto(producto.idProducto)" src="{{producto.imagen}}" class="card-img-top selected" alt="Imagen del Producto">
           <div class="card-body">
-             <h5 (click)="redirectToProducto(producto.idProducto)"  class="card-title selected">{{producto?.nombreProducto}}</h5>
-             <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto === producto?.idProducto">{{listaPrecioProductos[i].precio}}</p>
-             <p class="card-text" *ngIf="listaPrecioProductos[i]?.idProducto !== producto?.idProducto">No existe precio para el producto</p>
+             <h5 (click)="redirectToProducto(producto.idProducto)"  class="card-title selected">{{producto.nombreProducto}}</h5>
+             <p class="card-text">{{producto.precio}}</p>
           <div style="display: flex; flex-direction: row;">
             <button (click)="redirecToCarrito(producto.idProducto)" class="btn btn-primary">Agregar al Carrito</button>
             <button *ngIf="esAdmin()" style="padding-left: 3rem;" (click)="redirecToEditarProducto(producto.idProducto)" class="btn btn-link">Editar</button>

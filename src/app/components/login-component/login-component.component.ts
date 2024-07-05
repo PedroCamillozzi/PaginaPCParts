@@ -52,8 +52,6 @@ export class LoginComponentComponent implements OnInit{
     this._clienteService.login(cliente).subscribe({
       next: (data:any)=>{
         localStorage.setItem('token', data.token);
-        localStorage.setItem('idCliente', data.idCliente);
-        localStorage.setItem('Tipo de Usuario', data.tipoUsuarioNombre);
         this.router.navigate(['home']);
         this.loading = true;
         console.log(this._jwtService.getClientId(data.token));

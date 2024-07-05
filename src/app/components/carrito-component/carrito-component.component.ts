@@ -12,6 +12,8 @@ import { ErrorService } from '../../services/error.service';
 import { PedidoService } from '../../services/pedido.service';
 import { PrecioProductoService } from '../../services/precioProducto.service';
 import { ProductoService } from '../../services/producto.service';
+import { JwtService } from 'src/app/services/jwt.service';
+import { ImageService } from 'src/app/services/image.service';
 
 @Component({
   selector: 'app-carrito-component',
@@ -34,7 +36,9 @@ export class CarritoComponentComponent implements OnInit {
               private _toastr:ToastrService,
               private router:Router,
               private _pedidoService:PedidoService,
-              private _detallePedidoService:DetallePedidoService){
+              private _detallePedidoService:DetallePedidoService,
+              private _jwtService:JwtService,
+              private _imageService:ImageService){
   }
 
   ngOnInit(): void{
@@ -44,15 +48,19 @@ export class CarritoComponentComponent implements OnInit {
   }
   
   getCarritoCliente() {
-    const idCliente: string = localStorage.getItem('idCliente') || '';
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
     if(idCliente != ''){
       this._carritoService.getProductosCarritoCliente(idCliente).subscribe(data=>{
 
         this.carritoCliente = data
         this.getProductoCliente();
+        this.loadPrincipalProductsImages();
       })
     }
   }
+
+
 getProductoCliente(){
     this.carritoCliente?.forEach(cc => {
     this._productoService.getProducto(cc.idProducto.toString()).subscribe(data=>{
@@ -78,7 +86,8 @@ getPrecioProductosCliente(){
 }
 
   agregarProductoAlCarrito(){
-    const idCliente:string = localStorage.getItem('idCliente') || ''; 
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
     if(idCliente != ''){
       const carritoCliente ={
         idCliente: idCliente,
@@ -173,18 +182,20 @@ getPrecioProductosCliente(){
       this._toastr.error("Debe cargar productos al carrito", "Error")
       return
     }
-    const idCliente = localStorage.getItem('idCliente') || '';
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
     
     
     if(idCliente != ''){
-      this.carritoCliente?.forEach(cc => {
-        this._pedidoService.postPedidoCliente(idCliente).subscribe((data)=>{
-          const detallePedido:DetallePedidos = {
-            idPedido: data.idPedido,
-            idProducto: cc.idProducto,
-            cantidad: cc.cantidad
-          }        
-          
+      this._pedidoService.postPedidoCliente(idCliente).subscribe((data)=>{
+        const detallePedido:DetallePedidos = {
+          idPedido: data.idPedido,
+          idProducto: 0,
+          cantidad: 0
+        }  
+      this.carritoCliente?.forEach(cc => {      
+          detallePedido.idProducto = cc.idProducto
+          detallePedido.cantidad = cc.cantidad
           this._detallePedidoService.postDetallePedido(detallePedido).subscribe(()=>{
             
           })
@@ -199,6 +210,27 @@ getPrecioProductosCliente(){
    
     
     
+  }
+
+  loadPrincipalProductsImages(){
+    this._imageService.getPrincipalProductsImage().subscribe({
+      next: (data) =>{
+          this.productosCliente.forEach(lp => {
+            data.forEach((d:any) => {
+              if(d.filename.includes(lp.idProducto.toString())){
+                lp.imagen = 'data:image/jpeg;base64,' + d.data
+              }
+            });
+          if(lp.imagen == undefined){
+            lp.imagen = '../../../assets/images/Procesador_Intel_Celeron_G4900.jpg'
+          }          
+        });
+ 
+      },
+      error: (error:HttpErrorResponse)=>{
+        console.log(error);
+      }
+    })
   }
 
 }

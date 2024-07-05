@@ -3,13 +3,15 @@ import { Component, OnInit } from '@angular/core';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin } from 'rxjs';
 import { Categoria } from '../../interfaces/Categoria';
-import { PrecioProducto } from '../../interfaces/PrecioProductos';
 import { Producto } from '../../interfaces/Producto';
 import { PrecioProductoService } from '../../services/precioProducto.service';
 import { ProductoService } from '../../services/producto.service';
 import { ClienteService } from '../../services/cliente.service';
+import { JwtService } from 'src/app/services/jwt.service';
+import { ImageService } from 'src/app/services/image.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ProductoPrecio } from 'src/app/interfaces/ProductoPrecio';
 
 
 
@@ -34,7 +36,9 @@ const tree_Categoria:Categoria[]=[
 
 export class ProductosComponentComponent implements OnInit {
   listaProductos:Producto[]=[];
-  listaPrecioProductos:PrecioProducto[]=[];
+  listaProductosPrecio:ProductoPrecio[]= []
+  filtrado:string='Todos'
+  images:any = []
   
   private _transformer = (node: Categoria, level: number) => {
     return {
@@ -60,18 +64,22 @@ export class ProductosComponentComponent implements OnInit {
     private _precioProductoService:PrecioProductoService,
     private router:Router,
     private toastr:ToastrService,
-    private _clienteService:ClienteService){
-    this.getProductosAndPrecioActProducto();
+    private _clienteService:ClienteService,
+    private _jwtService: JwtService,
+    private _imageService:ImageService){
+    this.getProductos();
     this.dataSource.data = tree_Categoria;
   }
 
   ngOnInit(): void {
-    
+    this.loadPrincipalProductsImages();
+
   }
 
   getProductos(){
     this._productoService.getProductos().subscribe(data=>{
-      this.listaProductos = data      
+      this.listaProductos = data 
+      this.getPrecioActProducto(); 
     })
     
   }
@@ -79,27 +87,22 @@ export class ProductosComponentComponent implements OnInit {
   getPrecioActProducto(){
     this.listaProductos.forEach(producto => {
       this._precioProductoService.getPrecioProducto(producto.idProducto).subscribe(data=>{
-      this.listaPrecioProductos.push(data)
+      const prod:ProductoPrecio ={
+        idProducto: producto.idProducto,
+        nombreProducto: producto.nombreProducto,
+        descripcion: producto.descripcion,
+        detallesGenerales: producto.detallesGenerales,
+        imagen: producto.imagen,
+        stock: producto.stock,
+        idCategoria: producto.idCategoria,
+        fechaDesde: data.fechaDesde,
+        precio: data.precio
+      }
+      this.listaProductosPrecio.push(prod)
       })
     });
     
   }
-
-  getProductosAndPrecioActProducto() {
-    this._productoService.getProductos().subscribe(data => {
-        this.listaProductos = data;
-        //console.log(this.listaProductos);
-
-        // Crear un array de observables para llamar a getPrecioProducto por cada producto
-        const observables = this.listaProductos.map(producto => this._precioProductoService.getPrecioProducto(producto.idProducto));
-
-        // Esperar a que todos los observables se completen utilizando forkJoin
-        forkJoin(observables).subscribe(precios => {
-            this.listaPrecioProductos = precios;
-            //console.log(this.listaPrecioProductos);          
-        });
-    });
-  } 
 
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
@@ -112,7 +115,7 @@ export class ProductosComponentComponent implements OnInit {
 
   redirecToCarrito(idProducto:Number){
     const token:string = localStorage.getItem('token') || "";
-    const idCliente:string = localStorage.getItem('idCliente') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
   
     if(token !== null && token !== ""){
       this.router.navigate(['carrito/'+ idCliente + '/' + idProducto]);
@@ -134,7 +137,8 @@ export class ProductosComponentComponent implements OnInit {
   }
 
   redirecToEditarProducto(idProducto:Number){
-    const idCliente:string = localStorage.getItem('idCliente') || '';
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
 
     if(this.esAdmin()){
       this.router.navigate(['productoEdit/'+ idCliente + '/' + idProducto]);
@@ -145,16 +149,40 @@ export class ProductosComponentComponent implements OnInit {
   }
 
   ordenarPorTodos(){
-
+    this.listaProductosPrecio.sort((a,b)=> a.idProducto - b.idProducto);
+    this.filtrado = 'Todos'
   }
 
 
   ordenarPorMenorPrecio(){
-
+    this.listaProductosPrecio.sort((a,b) => a.precio - b.precio)
+    this.filtrado = 'Menor Precio'
   }
   
   ordenarPorMayorPrecio() {
+    this.listaProductosPrecio.sort((a,b) => b.precio - a.precio)
+    this.filtrado = 'Mayor Precio'
+  }
 
+  loadPrincipalProductsImages(){
+    this._imageService.getPrincipalProductsImage().subscribe({
+      next: (data) =>{
+          this.listaProductos.forEach(lp => {
+            data.forEach((d:any) => {
+              if(d.filename.includes(lp.idProducto.toString())){
+                lp.imagen = 'data:image/jpeg;base64,' + d.data
+              }
+            });
+          if(lp.imagen == undefined){
+            lp.imagen = '../../../assets/images/Procesador_Intel_Celeron_G4900.jpg'
+          }          
+        });
+ 
+      },
+      error: (error:HttpErrorResponse)=>{
+        console.log(error);
+      }
+    })
   }
 
 }

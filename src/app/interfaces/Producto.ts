@@ -3,7 +3,7 @@ export interface Producto{
     nombreProducto:string;
     descripcion:string;
     detallesGenerales:string;
-    imagen?:ImageData;
+    imagen?:String;
     stock:number;
     idCategoria?:number;
 }

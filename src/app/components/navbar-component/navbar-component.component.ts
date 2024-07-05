@@ -6,6 +6,9 @@ import { LogueoService } from '../../services/logueo.service';
 import { PrecioProductoService } from '../../services/precioProducto.service';
 import { ProductoService } from '../../services/producto.service';
 import { ClienteService } from '../../services/cliente.service';
+import { JwtService } from 'src/app/services/jwt.service';
+import { ImageService } from 'src/app/services/image.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -20,13 +23,16 @@ export class NavbarComponentComponent implements OnInit {
   productosFiltrados: Producto[] = [];
   precioProductosCliente:PrecioProducto[]=[];
   droplistFiltrado:boolean = true;
+  image:any = '../../../assets/images/usuarioPerfil.png'
 
 
   constructor( private routes: Router,
                private _logService: LogueoService,
                private _productoService:ProductoService,
                private _precioProductoService: PrecioProductoService,
-               private _clienteService:ClienteService ){
+               private _clienteService:ClienteService,
+               private _jwtService: JwtService,
+               private _imageService: ImageService ){
     
     //console.log("atributo ",this.logueado);
     //console.log("funcion: ",this.authentificarLogueo());
@@ -35,6 +41,7 @@ export class NavbarComponentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadPerfilImage();
     this.getProductosFiltrados();
     
     this.logueado = this.authentificarLogueo();
@@ -46,7 +53,8 @@ export class NavbarComponentComponent implements OnInit {
   }
 
   redirectToCarrito(){
-    const idCliente:string = localStorage.getItem('idCliente') || '';
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
     this.routes.navigate(['carrito/' + idCliente]);
   }
 
@@ -62,17 +70,18 @@ export class NavbarComponentComponent implements OnInit {
 
   cerrarSesion(){
     localStorage.removeItem('token');
-    localStorage.removeItem('idCliente');
     localStorage.removeItem('Tipo de Usuario');
   }
 
   redirectToDatosPersonales(){
-    const idCliente:string = localStorage.getItem('idCliente') || '';
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
     this.routes.navigate(['misdatos/'+ idCliente])
   }
 
   redirectToPedidosCliente(){
-    const idCliente:string = localStorage.getItem('idCliente') || '';
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
     this.routes.navigate(['misPedidos/'+ idCliente])
   }
 
@@ -132,13 +141,27 @@ export class NavbarComponentComponent implements OnInit {
   }
 
   redirectToAdministrarPedidos(){
-    const idCliente = localStorage.getItem('idCliente');
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
 
     this.routes.navigate(['administrarPedidos/'+idCliente]);
   }
 
   redirectToAgregarProducto(){
     this.routes.navigate(['agregarProducto']);
+  }
+
+  loadPerfilImage(){
+    const token = localStorage.getItem('token') || '';
+    const idCliente: string = this._jwtService.getClientId(token) || '';
+    this._imageService.getPerfilImage(idCliente).subscribe({
+      next:(data:any) =>{
+        this.image = 'data:image/jpeg;base64,' + data[0].data
+      },
+      error: (error:HttpErrorResponse) =>{
+        console.log(error);
+      }
+    })
   }
 
 

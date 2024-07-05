@@ -1,6 +1,7 @@
 <div class="contenedor">
     <div class="Contenedorfoto">
-        <img class="foto" src="../../../assets/images/usuarioPerfil.png" alt="">
+        <img class="foto" src="{{image}}"  alt="...">
+        <input type="file" name="perfilImage" accept="image/*" id="" (change)="changePerfilImage($event)">
     </div>
     <div class="formContainer">
         <form>
